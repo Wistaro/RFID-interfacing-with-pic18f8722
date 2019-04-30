@@ -8395,7 +8395,7 @@ char readDataRfid(void);
 void sendDataRfid(char data);
 
 void select_protocole(void);
-void get_NFC_tag(void);
+char get_NFC_tag(void);
 void sendStringUart2v2(const char* data);
 
 char* ascii2hex(char input);
@@ -8444,7 +8444,6 @@ while(!TXSTA1bits.TRMT);
 
 TXREG1 = data;
 
-
 isEchoOk = 1;
 isEcho2 = 1;
 startCountEcho = 0;
@@ -8453,6 +8452,10 @@ PORTD^=0x01<<6;
 
 
 }
+
+
+INTCONbits.TMR0IE=0;
+INTCONbits.GIE=0;
 
 return 1;
 
@@ -8472,7 +8475,6 @@ while(!TXSTA1bits.TRMT);
 TXREG1 = data_getId_2;
 
 
-
 for(int i = 0; i<=15; i++){
 
 while(!PIR1bits.RC1IF);
@@ -8487,7 +8489,7 @@ char isIdOk(){
 
 char validId = 1;
 
-for(int i = 3; i<=15; i++){
+for(int i = 3; i<=13; i++){
 
 if(id[i] != expected_id[i-3]){
 validId = 0;
@@ -8543,8 +8545,6 @@ sendDataRfid(0x3F);
 sendDataRfid(0x01);
 
 
-
-
 output_read = readDataRfid();
 response[0] = output_read+0x30;
 
@@ -8567,7 +8567,7 @@ if(k >= 1){
 sendStringUart2v2("OK-");
 power_calib = powerLvl[k];
 
-k = 8;
+
 
 }
 
@@ -8576,6 +8576,7 @@ sendStringUart2v2("NO-");
 }
 
 sendStringUart2v2(k+0x30);
+
 
 
 }
@@ -8595,32 +8596,80 @@ sendStringUart2v2("\nProtocole selectionne");
 else {
 sendStringUart2v2("\nErreur lors de la selection du protocole ");
 }
+
 readDataRfid();
 }
-void get_NFC_tag(void){
+char get_NFC_tag(void){
+
+_delay((unsigned long)((70)*(10000000/4000.0)));
+_delay((unsigned long)((70)*(10000000/4000.0)));
+_delay((unsigned long)((70)*(10000000/4000.0)));
+_delay((unsigned long)((70)*(10000000/4000.0)));
+_delay((unsigned long)((70)*(10000000/4000.0)));
+
 char buff_output;
-char respCmd1[6];
-char* respCmd2;
+char expected_uid[5] = {0x27, 0x58, 0xDA, 0xC5, 0x60};
+char uid[5];
+char isGoodTag = 0;
+char tagOk = 1;
+char respCmd1[7];
+char respCmd2[10];
 char command1[4] = {0x04, 0x02, 0x26, 0x07};
 char command2[5] = {0x04, 0x03, 0x93, 0x20, 0x08};
 
 
-for(int i = 0; i<5; i++){
-sendDataRfid(command2[i]);
+for(int i = 0; i<4; i++){
+sendDataRfid(command1[i]);
 }
 
-for(int j = 0; j<8; j++){
 buff_output = readDataRfid();
-sendStringUart2v2((const char*)ascii2hex(buff_output));
-}
+respCmd1[0] = buff_output;
 
-for(int k = 0; k<buff_output; k++){
+
+
+if(respCmd1[0] == 0x87){
 buff_output = readDataRfid();
-sendStringUart2v2((const char*)ascii2hex(buff_output));
+return 0;
+}
+
+buff_output = readDataRfid();
+buff_output = readDataRfid();
+buff_output = readDataRfid();
+
+buff_output = readDataRfid();
+buff_output = readDataRfid();
+
+buff_output = readDataRfid();
+
+for(int w = 0; w<5; w++){
+sendDataRfid(command2[w]);
+}
+
+respCmd2[0] = readDataRfid();
+respCmd2[1] = readDataRfid();
+respCmd2[2] = readDataRfid();
+respCmd2[3] = readDataRfid();
+respCmd2[4] = readDataRfid();
+respCmd2[5] = readDataRfid();
+respCmd2[6] = readDataRfid();
+respCmd2[7] = readDataRfid();
+respCmd2[8] = readDataRfid();
+respCmd2[9] = readDataRfid();
+
+
+for(int i = 2; i<7; i++){
+if(respCmd2[i] != expected_uid[i-2]){
+tagOk = 0;
+}
+}
+
+if(tagOk == 1){
+return 1;
+}else{
+return 2;
 }
 
 
-sendStringUart2v2("\nEND debug\n");
 }
 
 void sendStringUart2v2(const char* data){
@@ -8638,6 +8687,7 @@ TXREG2 = data[i];
 char* ascii2hex(char input){
 
 char* output;
+char buff[2];
 
 switch(input) {
 
@@ -8674,8 +8724,54 @@ break;
 case 0xF1:
 output = "0xF1 ";
 break;
+case 0x33:
+output = "0x33 ";
+break;
+case 0x16:
+output = "0x16 ";
+break;
+case 0x26:
+output = "0x26 ";
+break;
+case 0x94:
+output = "0x94 ";
+break;
+case 0xA3:
+output = "0xA3 ";
+break;
+case 0x41:
+output = "0x41 ";
+break;
+case 0xAA:
+output = "0xAA ";
+break;
+case 0xC5:
+output = "0xC5 ";
+break;
+case 0x8D:
+output = "0x8D ";
+break;
+case 0x87:
+output = "0x87 ";
+break;
+case 0x86:
+output = "0x86 ";
+break;
+case 0x27:
+output = "0x27 ";
+break;
+case 0x58:
+output = "0x58 ";
+break;
+case 0xDA:
+output = "0xDA ";
+break;
+case 0x60:
+output = "0x60 ";
+break;
 default:
-output = "?";
+output = "? ";
+break;
 }
 return output;
 }

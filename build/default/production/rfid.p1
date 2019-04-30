@@ -49,6 +49,20 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S378 . . . ]
 "7840
 [v _PIR1bits `VS378 ~T0 @X0 0 e@3998 ]
+[s S711 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S711 . RBIF INT0IF TMR0IF RBIE INT0IE TMR0IE PEIE_GIEL GIE_GIEH ]
+[s S712 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S712 . RBIF INT0IF TMR0IF RBIE INT0IE TMR0IE PEIE GIE ]
+[s S713 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S713 . RBIF INT0IF TMR0IF RBIE INT0IE TMR0IE GIEL GIEH ]
+[s S714 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S714 . . INT0F T0IF . INT0E T0IE PEIE GIE ]
+[s S715 :6 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S715 . . GIEL GIEH ]
+[u S710 `S711 1 `S712 1 `S713 1 `S714 1 `S715 1 ]
+[n S710 . . . . . . ]
+"13634
+[v _INTCONbits `VS710 ~T0 @X0 0 e@4082 ]
 "9185
 [v _RCREG1 `Vuc ~T0 @X0 0 e@4014 ]
 "25 rfid.c
@@ -77,8 +91,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _TXREG2 `Vuc ~T0 @X0 0 e@3949 ]
 "11 rfid.h
 [v _sendStringUart2v2 `(v ~T0 @X0 0 ef1`*Cuc ]
-"13
-[v _ascii2hex `(*uc ~T0 @X0 0 ef1`uc ]
 "55 C:\Program Files (x86)\Microchip\xc8\v1.30\include\string.h
 [v _strlen `(ui ~T0 @X0 0 ef1`*Cuc ]
 [; ;htc.h: 22: extern void __builtin_software_breakpoint(void);
@@ -6528,7 +6540,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;rfid.h: 6: char readDataRfid(void);
 [; ;rfid.h: 7: void sendDataRfid(char data);
 [; ;rfid.h: 9: void select_protocole(void);
-[; ;rfid.h: 10: void get_NFC_tag(void);
+[; ;rfid.h: 10: char get_NFC_tag(void);
 [; ;rfid.h: 11: void sendStringUart2v2(const char* data);
 [; ;rfid.h: 13: char* ascii2hex(char input);
 "23 rfid.c
@@ -6638,76 +6650,82 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;rfid.c: 64: TXREG1 = data;
 "64
 [e = _TXREG1 _data ]
-[; ;rfid.c: 67: isEchoOk = 1;
-"67
+[; ;rfid.c: 66: isEchoOk = 1;
+"66
 [e = _isEchoOk -> -> 1 `i `uc ]
-[; ;rfid.c: 68: isEcho2 = 1;
-"68
+[; ;rfid.c: 67: isEcho2 = 1;
+"67
 [e = _isEcho2 -> -> 1 `i `uc ]
-[; ;rfid.c: 69: startCountEcho = 0;
-"69
+[; ;rfid.c: 68: startCountEcho = 0;
+"68
 [e = _startCountEcho -> -> 0 `i `uc ]
-[; ;rfid.c: 70: PORTD^=0x01<<6;
-"70
+[; ;rfid.c: 69: PORTD^=0x01<<6;
+"69
 [e =^ _PORTD -> << -> 1 `i -> 6 `i `uc ]
-"71
+"70
 }
 [e :U 767 ]
-"74
+"73
 }
 [e :U 764 ]
 "54
 [e $ ! != -> . . _PIR1bits 0 5 `i -> -> -> 0 `i `Vuc `i 765  ]
 [e :U 766 ]
-[; ;rfid.c: 71: }
-[; ;rfid.c: 74: }
-[; ;rfid.c: 76: return 1;
+[; ;rfid.c: 70: }
+[; ;rfid.c: 73: }
+[; ;rfid.c: 76: INTCONbits.TMR0IE=0;
 "76
+[e = . . _INTCONbits 0 5 -> -> 0 `i `uc ]
+[; ;rfid.c: 77: INTCONbits.GIE=0;
+"77
+[e = . . _INTCONbits 1 7 -> -> 0 `i `uc ]
+[; ;rfid.c: 79: return 1;
+"79
 [e ) -> -> 1 `i `uc ]
 [e $UE 760  ]
-[; ;rfid.c: 79: }
-"79
+[; ;rfid.c: 82: }
+"82
 [e :UE 760 ]
 }
-"81
+"84
 [v _getId `(v ~T0 @X0 1 ef ]
 {
-[; ;rfid.c: 81: void getId(void){
+[; ;rfid.c: 84: void getId(void){
 [e :U _getId ]
 [f ]
-"83
+"86
 [v _data_getId_1 `uc ~T0 @X0 1 a ]
-[; ;rfid.c: 83: char data_getId_1 = 0x01;
+[; ;rfid.c: 86: char data_getId_1 = 0x01;
 [e = _data_getId_1 -> -> 1 `i `uc ]
-"84
-[v _data_getId_2 `uc ~T0 @X0 1 a ]
-[; ;rfid.c: 84: char data_getId_2 = 0x00;
-[e = _data_getId_2 -> -> 0 `i `uc ]
-"85
-[v _response_id `uc ~T0 @X0 1 a ]
-[; ;rfid.c: 85: char response_id;
-[; ;rfid.c: 87: while(!TXSTA1bits.TRMT);
 "87
+[v _data_getId_2 `uc ~T0 @X0 1 a ]
+[; ;rfid.c: 87: char data_getId_2 = 0x00;
+[e = _data_getId_2 -> -> 0 `i `uc ]
+"88
+[v _response_id `uc ~T0 @X0 1 a ]
+[; ;rfid.c: 88: char response_id;
+[; ;rfid.c: 90: while(!TXSTA1bits.TRMT);
+"90
 [e $U 772  ]
 [e :U 773 ]
 [e :U 772 ]
 [e $ ! != -> . . _TXSTA1bits 0 1 `i -> -> -> 0 `i `Vuc `i 773  ]
 [e :U 774 ]
-[; ;rfid.c: 88: TXREG1 = data_getId_1;
-"88
+[; ;rfid.c: 91: TXREG1 = data_getId_1;
+"91
 [e = _TXREG1 _data_getId_1 ]
-[; ;rfid.c: 90: while(!TXSTA1bits.TRMT);
-"90
+[; ;rfid.c: 93: while(!TXSTA1bits.TRMT);
+"93
 [e $U 775  ]
 [e :U 776 ]
 [e :U 775 ]
 [e $ ! != -> . . _TXSTA1bits 0 1 `i -> -> -> 0 `i `Vuc `i 776  ]
 [e :U 777 ]
-[; ;rfid.c: 91: TXREG1 = data_getId_2;
-"91
+[; ;rfid.c: 94: TXREG1 = data_getId_2;
+"94
 [e = _TXREG1 _data_getId_2 ]
-[; ;rfid.c: 95: for(int i = 0; i<=15; i++){
-"95
+[; ;rfid.c: 97: for(int i = 0; i<=15; i++){
+"97
 {
 [v _i `i ~T0 @X0 1 a ]
 [e = _i -> 0 `i ]
@@ -6715,153 +6733,153 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e $U 779  ]
 [e :U 778 ]
 {
-[; ;rfid.c: 97: while(!PIR1bits.RC1IF);
-"97
+[; ;rfid.c: 99: while(!PIR1bits.RC1IF);
+"99
 [e $U 781  ]
 [e :U 782 ]
 [e :U 781 ]
 [e $ ! != -> . . _PIR1bits 0 5 `i -> -> -> 0 `i `Vuc `i 782  ]
 [e :U 783 ]
-[; ;rfid.c: 98: response_id = RCREG1;
-"98
-[e = _response_id _RCREG1 ]
-[; ;rfid.c: 100: id[i] = RCREG1;
+[; ;rfid.c: 100: response_id = RCREG1;
 "100
+[e = _response_id _RCREG1 ]
+[; ;rfid.c: 102: id[i] = RCREG1;
+"102
 [e = *U + _id * -> _i `x -> -> # *U _id `i `x _RCREG1 ]
-"101
+"103
 }
-"95
+"97
 [e ++ _i -> 1 `i ]
 [e $ <= _i -> 15 `i 778  ]
 [e :U 779 ]
-"101
-}
-[; ;rfid.c: 101: }
-[; ;rfid.c: 103: }
 "103
+}
+[; ;rfid.c: 103: }
+[; ;rfid.c: 105: }
+"105
 [e :UE 771 ]
 }
-"105
+"107
 [v _isIdOk `(uc ~T0 @X0 1 ef ]
 {
-[; ;rfid.c: 105: char isIdOk(){
+[; ;rfid.c: 107: char isIdOk(){
 [e :U _isIdOk ]
 [f ]
-"107
-[v _validId `uc ~T0 @X0 1 a ]
-[; ;rfid.c: 107: char validId = 1;
-[e = _validId -> -> 1 `i `uc ]
-[; ;rfid.c: 109: for(int i = 3; i<=15; i++){
 "109
+[v _validId `uc ~T0 @X0 1 a ]
+[; ;rfid.c: 109: char validId = 1;
+[e = _validId -> -> 1 `i `uc ]
+[; ;rfid.c: 111: for(int i = 3; i<=13; i++){
+"111
 {
 [v _i `i ~T0 @X0 1 a ]
 [e = _i -> 3 `i ]
-[e $ <= _i -> 15 `i 785  ]
+[e $ <= _i -> 13 `i 785  ]
 [e $U 786  ]
 [e :U 785 ]
 {
-[; ;rfid.c: 111: if(id[i] != expected_id[i-3]){
-"111
+[; ;rfid.c: 113: if(id[i] != expected_id[i-3]){
+"113
 [e $ ! != -> *U + _id * -> _i `x -> -> # *U _id `i `x `i -> *U + _expected_id * -> - _i -> 3 `i `x -> -> # *U _expected_id `i `x `i 788  ]
 {
-[; ;rfid.c: 112: validId = 0;
-"112
+[; ;rfid.c: 114: validId = 0;
+"114
 [e = _validId -> -> 0 `i `uc ]
-"113
+"115
 }
-[; ;rfid.c: 113: }else{
+[; ;rfid.c: 115: }else{
 [e $U 789  ]
 [e :U 788 ]
 {
-[; ;rfid.c: 114: while(!TXSTA2bits.TRMT);
-"114
+[; ;rfid.c: 116: while(!TXSTA2bits.TRMT);
+"116
 [e $U 790  ]
 [e :U 791 ]
 [e :U 790 ]
 [e $ ! != -> . . _TXSTA2bits 0 1 `i -> -> -> 0 `i `Vuc `i 791  ]
 [e :U 792 ]
-[; ;rfid.c: 115: TXREG2 = id[i];
-"115
+[; ;rfid.c: 117: TXREG2 = id[i];
+"117
 [e = _TXREG2 *U + _id * -> _i `x -> -> # *U _id `i `x ]
-"116
+"118
 }
 [e :U 789 ]
-"118
-}
-"109
-[e ++ _i -> 1 `i ]
-[e $ <= _i -> 15 `i 785  ]
-[e :U 786 ]
-"118
-}
-[; ;rfid.c: 116: }
-[; ;rfid.c: 118: }
-[; ;rfid.c: 120: return validId;
 "120
+}
+"111
+[e ++ _i -> 1 `i ]
+[e $ <= _i -> 13 `i 785  ]
+[e :U 786 ]
+"120
+}
+[; ;rfid.c: 118: }
+[; ;rfid.c: 120: }
+[; ;rfid.c: 122: return validId;
+"122
 [e ) _validId ]
 [e $UE 784  ]
-[; ;rfid.c: 122: }
-"122
+[; ;rfid.c: 124: }
+"124
 [e :UE 784 ]
 }
-"124
+"126
 [v _sendDataRfid `(v ~T0 @X0 1 ef1`uc ]
 {
-[; ;rfid.c: 124: void sendDataRfid(char data){
+[; ;rfid.c: 126: void sendDataRfid(char data){
 [e :U _sendDataRfid ]
 [v _data `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;rfid.c: 126: while(!TXSTA1bits.TRMT);
-"126
+[; ;rfid.c: 128: while(!TXSTA1bits.TRMT);
+"128
 [e $U 794  ]
 [e :U 795 ]
 [e :U 794 ]
 [e $ ! != -> . . _TXSTA1bits 0 1 `i -> -> -> 0 `i `Vuc `i 795  ]
 [e :U 796 ]
-[; ;rfid.c: 127: TXREG1 = data;
-"127
+[; ;rfid.c: 129: TXREG1 = data;
+"129
 [e = _TXREG1 _data ]
-[; ;rfid.c: 128: }
-"128
+[; ;rfid.c: 130: }
+"130
 [e :UE 793 ]
 }
-"130
+"132
 [v _readDataRfid `(uc ~T0 @X0 1 ef ]
 {
-[; ;rfid.c: 130: char readDataRfid(void){
+[; ;rfid.c: 132: char readDataRfid(void){
 [e :U _readDataRfid ]
 [f ]
-"132
-[v _buff_output `uc ~T0 @X0 1 a ]
-[; ;rfid.c: 132: char buff_output;
-[; ;rfid.c: 134: while(!PIR1bits.RC1IF);
 "134
+[v _buff_output `uc ~T0 @X0 1 a ]
+[; ;rfid.c: 134: char buff_output;
+[; ;rfid.c: 136: while(!PIR1bits.RC1IF);
+"136
 [e $U 798  ]
 [e :U 799 ]
 [e :U 798 ]
 [e $ ! != -> . . _PIR1bits 0 5 `i -> -> -> 0 `i `Vuc `i 799  ]
 [e :U 800 ]
-[; ;rfid.c: 135: buff_output = RCREG1;
-"135
-[e = _buff_output _RCREG1 ]
-[; ;rfid.c: 137: return buff_output;
+[; ;rfid.c: 137: buff_output = RCREG1;
 "137
+[e = _buff_output _RCREG1 ]
+[; ;rfid.c: 139: return buff_output;
+"139
 [e ) _buff_output ]
 [e $UE 797  ]
-[; ;rfid.c: 138: }
-"138
+[; ;rfid.c: 140: }
+"140
 [e :UE 797 ]
 }
-"140
+"142
 [v _calibration `(uc ~T0 @X0 1 ef ]
 {
-[; ;rfid.c: 140: char calibration(void){
+[; ;rfid.c: 142: char calibration(void){
 [e :U _calibration ]
 [f ]
 [v F7278 `uc ~T0 @X0 -> 13 `i s ]
 [i F7278
 :U ..
-"142
+"144
 -> -> 7 `i `uc
 -> -> 14 `i `uc
 -> -> 3 `i `uc
@@ -6878,76 +6896,76 @@ Version 3.2 HI-TECH Software Intermediate Code
 ..
 ]
 [v _stringInput `uc ~T0 @X0 -> 13 `i a ]
-[; ;rfid.c: 142: char stringInput[13] = {0x07, 0x0E, 0x03, 0xA1, 0x00, 0xF8, 0x01, 0x18, 0x00, 0x20, 0x60, 0x60, 0x00};
+[; ;rfid.c: 144: char stringInput[13] = {0x07, 0x0E, 0x03, 0xA1, 0x00, 0xF8, 0x01, 0x18, 0x00, 0x20, 0x60, 0x60, 0x00};
 [e = _stringInput F7278 ]
-"144
+"146
 [v _i `i ~T0 @X0 1 a ]
 [v _j `i ~T0 @X0 1 a ]
-"145
-[v _k `i ~T0 @X0 1 a ]
-[; ;rfid.c: 144: int i, j;
-[; ;rfid.c: 145: int k = 0;
-[e = _k -> 0 `i ]
-"146
-[v _power_calib `uc ~T0 @X0 1 a ]
 "147
+[v _k `i ~T0 @X0 1 a ]
+[; ;rfid.c: 146: int i, j;
+[; ;rfid.c: 147: int k = 0;
+[e = _k -> 0 `i ]
+"148
+[v _power_calib `uc ~T0 @X0 1 a ]
+"149
 [v _output_read `uc ~T0 @X0 1 a ]
 [v F7285 `uc ~T0 @X0 -> 3 `i s ]
 [i F7285
 :U ..
-"148
+"150
 -> -> 87 `i `uc
 -> -> 87 `i `uc
 -> -> 87 `i `uc
 ..
 ]
 [v _response `uc ~T0 @X0 -> 3 `i a ]
-[; ;rfid.c: 146: char power_calib;
-[; ;rfid.c: 147: char output_read;
-[; ;rfid.c: 148: char response[3] = {0x57, 0x57, 0x57};
+[; ;rfid.c: 148: char power_calib;
+[; ;rfid.c: 149: char output_read;
+[; ;rfid.c: 150: char response[3] = {0x57, 0x57, 0x57};
 [e = _response F7285 ]
-[; ;rfid.c: 150: output_read = readDataRfid();
-"150
+[; ;rfid.c: 152: output_read = readDataRfid();
+"152
 [e = _output_read ( _readDataRfid ..  ]
-[; ;rfid.c: 151: output_read = readDataRfid();
-"151
-[e = _output_read ( _readDataRfid ..  ]
-[; ;rfid.c: 153: for(k = 0; k<=8; k++){
+[; ;rfid.c: 153: output_read = readDataRfid();
 "153
+[e = _output_read ( _readDataRfid ..  ]
+[; ;rfid.c: 155: for(k = 0; k<=8; k++){
+"155
 {
 [e = _k -> 0 `i ]
 [e $ <= _k -> 8 `i 802  ]
 [e $U 803  ]
 [e :U 802 ]
 {
-[; ;rfid.c: 155: for(i = 0; i<=12; i++){
-"155
+[; ;rfid.c: 157: for(i = 0; i<=12; i++){
+"157
 {
 [e = _i -> 0 `i ]
 [e $ <= _i -> 12 `i 805  ]
 [e $U 806  ]
 [e :U 805 ]
 {
-[; ;rfid.c: 156: sendDataRfid(stringInput[i]);
-"156
+[; ;rfid.c: 158: sendDataRfid(stringInput[i]);
+"158
 [e ( _sendDataRfid (1 *U + &U _stringInput * -> -> _i `ui `ux -> -> # *U &U _stringInput `ui `ux ]
-"157
+"159
 }
-"155
+"157
 [e ++ _i -> 1 `i ]
 [e $ <= _i -> 12 `i 805  ]
 [e :U 806 ]
-"157
-}
-[; ;rfid.c: 157: }
-[; ;rfid.c: 159: sendDataRfid(powerLvl[k]);
 "159
-[e ( _sendDataRfid (1 *U + &U _powerLvl * -> -> _k `ui `ux -> -> # *U &U _powerLvl `ui `ux ]
-[; ;rfid.c: 161: sendDataRfid(0x3F);
+}
+[; ;rfid.c: 159: }
+[; ;rfid.c: 161: sendDataRfid(powerLvl[k]);
 "161
+[e ( _sendDataRfid (1 *U + &U _powerLvl * -> -> _k `ui `ux -> -> # *U &U _powerLvl `ui `ux ]
+[; ;rfid.c: 163: sendDataRfid(0x3F);
+"163
 [e ( _sendDataRfid (1 -> -> 63 `i `uc ]
-[; ;rfid.c: 162: sendDataRfid(0x01);
-"162
+[; ;rfid.c: 164: sendDataRfid(0x01);
+"164
 [e ( _sendDataRfid (1 -> -> 1 `i `uc ]
 [; ;rfid.c: 167: output_read = readDataRfid();
 "167
@@ -7015,9 +7033,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;rfid.c: 187: power_calib = powerLvl[k];
 "187
 [e = _power_calib *U + &U _powerLvl * -> -> _k `ui `ux -> -> # *U &U _powerLvl `ui `ux ]
-[; ;rfid.c: 189: k = 8;
-"189
-[e = _k -> 8 `i ]
 "191
 }
 [e :U 814 ]
@@ -7038,86 +7053,127 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;rfid.c: 197: sendStringUart2v2(k+0x30);
 "197
 [e ( _sendStringUart2v2 (1 -> + _k -> 48 `i `*Cuc ]
-"200
+"201
 }
-"153
+"155
 [e ++ _k -> 1 `i ]
 [e $ <= _k -> 8 `i 802  ]
 [e :U 803 ]
-"200
+"201
 }
-[; ;rfid.c: 200: }
-[; ;rfid.c: 202: return power_calib;
-"202
+[; ;rfid.c: 201: }
+[; ;rfid.c: 203: return power_calib;
+"203
 [e ) _power_calib ]
 [e $UE 801  ]
-[; ;rfid.c: 203: }
-"203
+[; ;rfid.c: 204: }
+"204
 [e :UE 801 ]
 }
-"205
+"206
 [v _select_protocole `(v ~T0 @X0 1 ef ]
 {
-[; ;rfid.c: 205: void select_protocole(void){
+[; ;rfid.c: 206: void select_protocole(void){
 [e :U _select_protocole ]
 [f ]
-[; ;rfid.c: 206: sendDataRfid(0x02);
-"206
-[e ( _sendDataRfid (1 -> -> 2 `i `uc ]
 [; ;rfid.c: 207: sendDataRfid(0x02);
 "207
 [e ( _sendDataRfid (1 -> -> 2 `i `uc ]
 [; ;rfid.c: 208: sendDataRfid(0x02);
 "208
 [e ( _sendDataRfid (1 -> -> 2 `i `uc ]
-[; ;rfid.c: 209: sendDataRfid(0x00);
+[; ;rfid.c: 209: sendDataRfid(0x02);
 "209
+[e ( _sendDataRfid (1 -> -> 2 `i `uc ]
+[; ;rfid.c: 210: sendDataRfid(0x00);
+"210
 [e ( _sendDataRfid (1 -> -> 0 `i `uc ]
-[; ;rfid.c: 211: if (readDataRfid()==0x00){
-"211
+[; ;rfid.c: 212: if (readDataRfid()==0x00){
+"212
 [e $ ! == -> ( _readDataRfid ..  `i -> 0 `i 817  ]
 {
-[; ;rfid.c: 212: sendStringUart2v2("\nProtocole selectionne");
-"212
-[e ( _sendStringUart2v2 (1 :s 4C ]
+[; ;rfid.c: 213: sendStringUart2v2("\nProtocole selectionne");
 "213
-}
-[; ;rfid.c: 213: }
-[e $U 818  ]
+[e ( _sendStringUart2v2 (1 :s 4C ]
 "214
-[e :U 817 ]
-[; ;rfid.c: 214: else {
-{
-[; ;rfid.c: 215: sendStringUart2v2("\nErreur lors de la selection du protocole ");
+}
+[; ;rfid.c: 214: }
+[e $U 818  ]
 "215
-[e ( _sendStringUart2v2 (1 :s 5C ]
+[e :U 817 ]
+[; ;rfid.c: 215: else {
+{
+[; ;rfid.c: 216: sendStringUart2v2("\nErreur lors de la selection du protocole ");
 "216
+[e ( _sendStringUart2v2 (1 :s 5C ]
+"217
 }
 [e :U 818 ]
-[; ;rfid.c: 216: }
-[; ;rfid.c: 217: readDataRfid();
-"217
+[; ;rfid.c: 217: }
+[; ;rfid.c: 219: readDataRfid();
+"219
 [e ( _readDataRfid ..  ]
-[; ;rfid.c: 218: }
-"218
+[; ;rfid.c: 220: }
+"220
 [e :UE 816 ]
 }
-"219
-[v _get_NFC_tag `(v ~T0 @X0 1 ef ]
+"221
+[v _get_NFC_tag `(uc ~T0 @X0 1 ef ]
 {
-[; ;rfid.c: 219: void get_NFC_tag(void){
+[; ;rfid.c: 221: char get_NFC_tag(void){
 [e :U _get_NFC_tag ]
 [f ]
-"220
-[v _buff_output `uc ~T0 @X0 1 a ]
-"221
-[v _respCmd1 `uc ~T0 @X0 -> 6 `i a ]
-"222
-[v _respCmd2 `*uc ~T0 @X0 1 a ]
-[v F7292 `uc ~T0 @X0 -> 4 `i s ]
-[i F7292
-:U ..
+[; ;rfid.c: 223: _delay((unsigned long)((70)*(10000000/4000.0)));
 "223
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+[; ;rfid.c: 224: _delay((unsigned long)((70)*(10000000/4000.0)));
+"224
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+[; ;rfid.c: 225: _delay((unsigned long)((70)*(10000000/4000.0)));
+"225
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+[; ;rfid.c: 226: _delay((unsigned long)((70)*(10000000/4000.0)));
+"226
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+[; ;rfid.c: 227: _delay((unsigned long)((70)*(10000000/4000.0)));
+"227
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+"229
+[v _buff_output `uc ~T0 @X0 1 a ]
+[v F7295 `uc ~T0 @X0 -> 5 `i s ]
+[i F7295
+:U ..
+"230
+-> -> 39 `i `uc
+-> -> 88 `i `uc
+-> -> 218 `i `uc
+-> -> 197 `i `uc
+-> -> 96 `i `uc
+..
+]
+[v _expected_uid `uc ~T0 @X0 -> 5 `i a ]
+[; ;rfid.c: 229: char buff_output;
+[; ;rfid.c: 230: char expected_uid[5] = {0x27, 0x58, 0xDA, 0xC5, 0x60};
+[e = _expected_uid F7295 ]
+"231
+[v _uid `uc ~T0 @X0 -> 5 `i a ]
+"232
+[v _isGoodTag `uc ~T0 @X0 1 a ]
+[; ;rfid.c: 231: char uid[5];
+[; ;rfid.c: 232: char isGoodTag = 0;
+[e = _isGoodTag -> -> 0 `i `uc ]
+"233
+[v _tagOk `uc ~T0 @X0 1 a ]
+[; ;rfid.c: 233: char tagOk = 1;
+[e = _tagOk -> -> 1 `i `uc ]
+"234
+[v _respCmd1 `uc ~T0 @X0 -> 7 `i a ]
+"235
+[v _respCmd2 `uc ~T0 @X0 -> 10 `i a ]
+[v F7302 `uc ~T0 @X0 -> 4 `i s ]
+[i F7302
+:U ..
+"236
 -> -> 4 `i `uc
 -> -> 2 `i `uc
 -> -> 38 `i `uc
@@ -7125,15 +7181,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 ..
 ]
 [v _command1 `uc ~T0 @X0 -> 4 `i a ]
-[; ;rfid.c: 220: char buff_output;
-[; ;rfid.c: 221: char respCmd1[6];
-[; ;rfid.c: 222: char* respCmd2;
-[; ;rfid.c: 223: char command1[4] = {0x04, 0x02, 0x26, 0x07};
-[e = _command1 F7292 ]
-[v F7294 `uc ~T0 @X0 -> 5 `i s ]
-[i F7294
+[; ;rfid.c: 234: char respCmd1[7];
+[; ;rfid.c: 235: char respCmd2[10];
+[; ;rfid.c: 236: char command1[4] = {0x04, 0x02, 0x26, 0x07};
+[e = _command1 F7302 ]
+[v F7304 `uc ~T0 @X0 -> 5 `i s ]
+[i F7304
 :U ..
-"224
+"237
 -> -> 4 `i `uc
 -> -> 3 `i `uc
 -> -> 147 `i `uc
@@ -7142,292 +7197,552 @@ Version 3.2 HI-TECH Software Intermediate Code
 ..
 ]
 [v _command2 `uc ~T0 @X0 -> 5 `i a ]
-[; ;rfid.c: 224: char command2[5] = {0x04, 0x03, 0x93, 0x20, 0x08};
-[e = _command2 F7294 ]
-[; ;rfid.c: 227: for(int i = 0; i<5; i++){
-"227
+[; ;rfid.c: 237: char command2[5] = {0x04, 0x03, 0x93, 0x20, 0x08};
+[e = _command2 F7304 ]
+[; ;rfid.c: 240: for(int i = 0; i<4; i++){
+"240
 {
 [v _i `i ~T0 @X0 1 a ]
 [e = _i -> 0 `i ]
-[e $ < _i -> 5 `i 820  ]
+[e $ < _i -> 4 `i 820  ]
 [e $U 821  ]
 [e :U 820 ]
 {
-[; ;rfid.c: 228: sendDataRfid(command2[i]);
-"228
-[e ( _sendDataRfid (1 *U + &U _command2 * -> -> _i `ui `ux -> -> # *U &U _command2 `ui `ux ]
-"229
-}
-"227
-[e ++ _i -> 1 `i ]
-[e $ < _i -> 5 `i 820  ]
-[e :U 821 ]
-"229
-}
-[; ;rfid.c: 229: }
-[; ;rfid.c: 231: for(int j = 0; j<8; j++){
-"231
-{
-[v _j `i ~T0 @X0 1 a ]
-[e = _j -> 0 `i ]
-[e $ < _j -> 8 `i 823  ]
-[e $U 824  ]
-[e :U 823 ]
-{
-[; ;rfid.c: 232: buff_output = readDataRfid();
-"232
-[e = _buff_output ( _readDataRfid ..  ]
-[; ;rfid.c: 233: sendStringUart2v2((const char*)ascii2hex(buff_output));
-"233
-[e ( _sendStringUart2v2 (1 -> ( _ascii2hex (1 _buff_output `*Cuc ]
-"234
-}
-"231
-[e ++ _j -> 1 `i ]
-[e $ < _j -> 8 `i 823  ]
-[e :U 824 ]
-"234
-}
-[; ;rfid.c: 234: }
-[; ;rfid.c: 236: for(int k = 0; k<buff_output; k++){
-"236
-{
-[v _k `i ~T0 @X0 1 a ]
-[e = _k -> 0 `i ]
-[e $U 829  ]
-[e :U 826 ]
-{
-[; ;rfid.c: 237: buff_output = readDataRfid();
-"237
-[e = _buff_output ( _readDataRfid ..  ]
-[; ;rfid.c: 238: sendStringUart2v2((const char*)ascii2hex(buff_output));
-"238
-[e ( _sendStringUart2v2 (1 -> ( _ascii2hex (1 _buff_output `*Cuc ]
-"239
-}
-"236
-[e ++ _k -> 1 `i ]
-[e :U 829 ]
-[e $ < _k -> _buff_output `i 826  ]
-[e :U 827 ]
-"239
-}
-[; ;rfid.c: 239: }
-[; ;rfid.c: 242: sendStringUart2v2("\nEND debug\n");
+[; ;rfid.c: 241: sendDataRfid(command1[i]);
+"241
+[e ( _sendDataRfid (1 *U + &U _command1 * -> -> _i `ui `ux -> -> # *U &U _command1 `ui `ux ]
 "242
-[e ( _sendStringUart2v2 (1 :s 6C ]
-[; ;rfid.c: 243: }
-"243
+}
+"240
+[e ++ _i -> 1 `i ]
+[e $ < _i -> 4 `i 820  ]
+[e :U 821 ]
+"242
+}
+[; ;rfid.c: 242: }
+[; ;rfid.c: 244: buff_output = readDataRfid();
+"244
+[e = _buff_output ( _readDataRfid ..  ]
+[; ;rfid.c: 245: respCmd1[0] = buff_output;
+"245
+[e = *U + &U _respCmd1 * -> -> -> 0 `i `ui `ux -> -> # *U &U _respCmd1 `ui `ux _buff_output ]
+[; ;rfid.c: 249: if(respCmd1[0] == 0x87){
+"249
+[e $ ! == -> *U + &U _respCmd1 * -> -> -> 0 `i `ui `ux -> -> # *U &U _respCmd1 `ui `ux `i -> 135 `i 823  ]
+{
+[; ;rfid.c: 250: buff_output = readDataRfid();
+"250
+[e = _buff_output ( _readDataRfid ..  ]
+[; ;rfid.c: 251: return 0;
+"251
+[e ) -> -> 0 `i `uc ]
+[e $UE 819  ]
+"252
+}
+[e :U 823 ]
+[; ;rfid.c: 252: }
+[; ;rfid.c: 254: buff_output = readDataRfid();
+"254
+[e = _buff_output ( _readDataRfid ..  ]
+[; ;rfid.c: 255: buff_output = readDataRfid();
+"255
+[e = _buff_output ( _readDataRfid ..  ]
+[; ;rfid.c: 256: buff_output = readDataRfid();
+"256
+[e = _buff_output ( _readDataRfid ..  ]
+[; ;rfid.c: 258: buff_output = readDataRfid();
+"258
+[e = _buff_output ( _readDataRfid ..  ]
+[; ;rfid.c: 259: buff_output = readDataRfid();
+"259
+[e = _buff_output ( _readDataRfid ..  ]
+[; ;rfid.c: 261: buff_output = readDataRfid();
+"261
+[e = _buff_output ( _readDataRfid ..  ]
+[; ;rfid.c: 263: for(int w = 0; w<5; w++){
+"263
+{
+[v _w `i ~T0 @X0 1 a ]
+[e = _w -> 0 `i ]
+[e $ < _w -> 5 `i 824  ]
+[e $U 825  ]
+[e :U 824 ]
+{
+[; ;rfid.c: 264: sendDataRfid(command2[w]);
+"264
+[e ( _sendDataRfid (1 *U + &U _command2 * -> -> _w `ui `ux -> -> # *U &U _command2 `ui `ux ]
+"265
+}
+"263
+[e ++ _w -> 1 `i ]
+[e $ < _w -> 5 `i 824  ]
+[e :U 825 ]
+"265
+}
+[; ;rfid.c: 265: }
+[; ;rfid.c: 267: respCmd2[0] = readDataRfid();
+"267
+[e = *U + &U _respCmd2 * -> -> -> 0 `i `ui `ux -> -> # *U &U _respCmd2 `ui `ux ( _readDataRfid ..  ]
+[; ;rfid.c: 268: respCmd2[1] = readDataRfid();
+"268
+[e = *U + &U _respCmd2 * -> -> -> 1 `i `ui `ux -> -> # *U &U _respCmd2 `ui `ux ( _readDataRfid ..  ]
+[; ;rfid.c: 269: respCmd2[2] = readDataRfid();
+"269
+[e = *U + &U _respCmd2 * -> -> -> 2 `i `ui `ux -> -> # *U &U _respCmd2 `ui `ux ( _readDataRfid ..  ]
+[; ;rfid.c: 270: respCmd2[3] = readDataRfid();
+"270
+[e = *U + &U _respCmd2 * -> -> -> 3 `i `ui `ux -> -> # *U &U _respCmd2 `ui `ux ( _readDataRfid ..  ]
+[; ;rfid.c: 271: respCmd2[4] = readDataRfid();
+"271
+[e = *U + &U _respCmd2 * -> -> -> 4 `i `ui `ux -> -> # *U &U _respCmd2 `ui `ux ( _readDataRfid ..  ]
+[; ;rfid.c: 272: respCmd2[5] = readDataRfid();
+"272
+[e = *U + &U _respCmd2 * -> -> -> 5 `i `ui `ux -> -> # *U &U _respCmd2 `ui `ux ( _readDataRfid ..  ]
+[; ;rfid.c: 273: respCmd2[6] = readDataRfid();
+"273
+[e = *U + &U _respCmd2 * -> -> -> 6 `i `ui `ux -> -> # *U &U _respCmd2 `ui `ux ( _readDataRfid ..  ]
+[; ;rfid.c: 274: respCmd2[7] = readDataRfid();
+"274
+[e = *U + &U _respCmd2 * -> -> -> 7 `i `ui `ux -> -> # *U &U _respCmd2 `ui `ux ( _readDataRfid ..  ]
+[; ;rfid.c: 275: respCmd2[8] = readDataRfid();
+"275
+[e = *U + &U _respCmd2 * -> -> -> 8 `i `ui `ux -> -> # *U &U _respCmd2 `ui `ux ( _readDataRfid ..  ]
+[; ;rfid.c: 276: respCmd2[9] = readDataRfid();
+"276
+[e = *U + &U _respCmd2 * -> -> -> 9 `i `ui `ux -> -> # *U &U _respCmd2 `ui `ux ( _readDataRfid ..  ]
+[; ;rfid.c: 279: for(int i = 2; i<7; i++){
+"279
+{
+[v _i `i ~T0 @X0 1 a ]
+[e = _i -> 2 `i ]
+[e $ < _i -> 7 `i 827  ]
+[e $U 828  ]
+[e :U 827 ]
+{
+[; ;rfid.c: 280: if(respCmd2[i] != expected_uid[i-2]){
+"280
+[e $ ! != -> *U + &U _respCmd2 * -> -> _i `ui `ux -> -> # *U &U _respCmd2 `ui `ux `i -> *U + &U _expected_uid * -> -> - _i -> 2 `i `ui `ux -> -> # *U &U _expected_uid `ui `ux `i 830  ]
+{
+[; ;rfid.c: 281: tagOk = 0;
+"281
+[e = _tagOk -> -> 0 `i `uc ]
+"282
+}
+[e :U 830 ]
+"283
+}
+"279
+[e ++ _i -> 1 `i ]
+[e $ < _i -> 7 `i 827  ]
+[e :U 828 ]
+"283
+}
+[; ;rfid.c: 282: }
+[; ;rfid.c: 283: }
+[; ;rfid.c: 285: if(tagOk == 1){
+"285
+[e $ ! == -> _tagOk `i -> 1 `i 831  ]
+{
+[; ;rfid.c: 286: return 1;
+"286
+[e ) -> -> 1 `i `uc ]
+[e $UE 819  ]
+"287
+}
+[; ;rfid.c: 287: }else{
+[e $U 832  ]
+[e :U 831 ]
+{
+[; ;rfid.c: 288: return 2;
+"288
+[e ) -> -> 2 `i `uc ]
+[e $UE 819  ]
+"289
+}
+[e :U 832 ]
+[; ;rfid.c: 289: }
+[; ;rfid.c: 292: }
+"292
 [e :UE 819 ]
 }
-"245
+"294
 [v _sendStringUart2v2 `(v ~T0 @X0 1 ef1`*Cuc ]
 {
-[; ;rfid.c: 245: void sendStringUart2v2(const char* data){
+[; ;rfid.c: 294: void sendStringUart2v2(const char* data){
 [e :U _sendStringUart2v2 ]
 [v _data `*Cuc ~T0 @X0 1 r1 ]
 [f ]
-"247
+"296
 [v _i `i ~T0 @X0 1 a ]
-[; ;rfid.c: 247: int i = 0;
+[; ;rfid.c: 296: int i = 0;
 [e = _i -> 0 `i ]
-"248
+"297
 [v _taille_tab `i ~T0 @X0 1 a ]
-[; ;rfid.c: 248: int taille_tab = strlen(data);
+[; ;rfid.c: 297: int taille_tab = strlen(data);
 [e = _taille_tab -> ( _strlen (1 _data `i ]
-[; ;rfid.c: 250: for(i = 0; i<= taille_tab; i++){
-"250
+[; ;rfid.c: 299: for(i = 0; i<= taille_tab; i++){
+"299
 {
 [e = _i -> 0 `i ]
-[e $U 834  ]
-[e :U 831 ]
-{
-[; ;rfid.c: 252: while(!TXSTA2bits.TRMT);
-"252
-[e $U 835  ]
-[e :U 836 ]
-[e :U 835 ]
-[e $ ! != -> . . _TXSTA2bits 0 1 `i -> -> -> 0 `i `Vuc `i 836  ]
-[e :U 837 ]
-[; ;rfid.c: 253: TXREG2 = data[i];
-"253
-[e = _TXREG2 *U + _data * -> _i `x -> -> # *U _data `i `x ]
-"254
-}
-"250
-[e ++ _i -> 1 `i ]
+[e $U 837  ]
 [e :U 834 ]
-[e $ <= _i _taille_tab 831  ]
-[e :U 832 ]
-"254
+{
+[; ;rfid.c: 301: while(!TXSTA2bits.TRMT);
+"301
+[e $U 838  ]
+[e :U 839 ]
+[e :U 838 ]
+[e $ ! != -> . . _TXSTA2bits 0 1 `i -> -> -> 0 `i `Vuc `i 839  ]
+[e :U 840 ]
+[; ;rfid.c: 302: TXREG2 = data[i];
+"302
+[e = _TXREG2 *U + _data * -> _i `x -> -> # *U _data `i `x ]
+"303
 }
-[; ;rfid.c: 254: }
-[; ;rfid.c: 255: }
-"255
-[e :UE 830 ]
+"299
+[e ++ _i -> 1 `i ]
+[e :U 837 ]
+[e $ <= _i _taille_tab 834  ]
+[e :U 835 ]
+"303
 }
-"257
+[; ;rfid.c: 303: }
+[; ;rfid.c: 304: }
+"304
+[e :UE 833 ]
+}
+"306
 [v _ascii2hex `(*uc ~T0 @X0 1 ef1`uc ]
 {
-[; ;rfid.c: 257: char* ascii2hex(char input){
+[; ;rfid.c: 306: char* ascii2hex(char input){
 [e :U _ascii2hex ]
 [v _input `uc ~T0 @X0 1 r1 ]
 [f ]
-"259
+"308
 [v _output `*uc ~T0 @X0 1 a ]
-[; ;rfid.c: 259: char* output;
-[; ;rfid.c: 261: switch(input) {
-"261
-[e $U 840  ]
+"309
+[v _buff `uc ~T0 @X0 -> 2 `i a ]
+[; ;rfid.c: 308: char* output;
+[; ;rfid.c: 309: char buff[2];
+[; ;rfid.c: 311: switch(input) {
+"311
+[e $U 843  ]
 {
-[; ;rfid.c: 263: case 0x80:
-"263
-[e :U 841 ]
-[; ;rfid.c: 264: output = "0x80 ";
-"264
-[e = _output -> :s 7C `*uc ]
-[; ;rfid.c: 265: break;
-"265
-[e $U 839  ]
-[; ;rfid.c: 266: case 0x05:
-"266
-[e :U 842 ]
-[; ;rfid.c: 267: output = "0x05 ";
-"267
-[e = _output -> :s 8C `*uc ]
-[; ;rfid.c: 268: break;
-"268
-[e $U 839  ]
-[; ;rfid.c: 269: case 0x44:
-"269
-[e :U 843 ]
-[; ;rfid.c: 270: output = "0x44 ";
-"270
-[e = _output -> :s 9C `*uc ]
-[; ;rfid.c: 271: break;
-"271
-[e $U 839  ]
-[; ;rfid.c: 272: case 0x00:
-"272
+[; ;rfid.c: 313: case 0x80:
+"313
 [e :U 844 ]
-[; ;rfid.c: 273: output = "0x00";
-"273
-[e = _output -> :s 10C `*uc ]
-[; ;rfid.c: 274: break;
-"274
-[e $U 839  ]
-[; ;rfid.c: 275: case 0x28:
-"275
+[; ;rfid.c: 314: output = "0x80 ";
+"314
+[e = _output -> :s 6C `*uc ]
+[; ;rfid.c: 315: break;
+"315
+[e $U 842  ]
+[; ;rfid.c: 316: case 0x05:
+"316
 [e :U 845 ]
-[; ;rfid.c: 276: output = "0x28 ";
-"276
-[e = _output -> :s 11C `*uc ]
-[; ;rfid.c: 277: break;
-"277
-[e $U 839  ]
-[; ;rfid.c: 278: case 0x08:
-"278
+[; ;rfid.c: 317: output = "0x05 ";
+"317
+[e = _output -> :s 7C `*uc ]
+[; ;rfid.c: 318: break;
+"318
+[e $U 842  ]
+[; ;rfid.c: 319: case 0x44:
+"319
 [e :U 846 ]
-[; ;rfid.c: 279: output = "0x08 ";
-"279
-[e = _output -> :s 12C `*uc ]
-[; ;rfid.c: 280: break;
-"280
-[e $U 839  ]
-[; ;rfid.c: 281: case 0x88:
-"281
+[; ;rfid.c: 320: output = "0x44 ";
+"320
+[e = _output -> :s 8C `*uc ]
+[; ;rfid.c: 321: break;
+"321
+[e $U 842  ]
+[; ;rfid.c: 322: case 0x00:
+"322
 [e :U 847 ]
-[; ;rfid.c: 282: output = "0x88 ";
-"282
-[e = _output -> :s 13C `*uc ]
-[; ;rfid.c: 283: break;
-"283
-[e $U 839  ]
-[; ;rfid.c: 284: case 0x04:
-"284
+[; ;rfid.c: 323: output = "0x00";
+"323
+[e = _output -> :s 9C `*uc ]
+[; ;rfid.c: 324: break;
+"324
+[e $U 842  ]
+[; ;rfid.c: 325: case 0x28:
+"325
 [e :U 848 ]
-[; ;rfid.c: 285: output = "0x04 ";
-"285
-[e = _output -> :s 14C `*uc ]
-[; ;rfid.c: 286: break;
-"286
-[e $U 839  ]
-[; ;rfid.c: 287: case 0xA8:
-"287
+[; ;rfid.c: 326: output = "0x28 ";
+"326
+[e = _output -> :s 10C `*uc ]
+[; ;rfid.c: 327: break;
+"327
+[e $U 842  ]
+[; ;rfid.c: 328: case 0x08:
+"328
 [e :U 849 ]
-[; ;rfid.c: 288: output = "0xA8 ";
-"288
-[e = _output -> :s 15C `*uc ]
-[; ;rfid.c: 289: break;
-"289
-[e $U 839  ]
-[; ;rfid.c: 290: case 0xD5:
-"290
+[; ;rfid.c: 329: output = "0x08 ";
+"329
+[e = _output -> :s 11C `*uc ]
+[; ;rfid.c: 330: break;
+"330
+[e $U 842  ]
+[; ;rfid.c: 331: case 0x88:
+"331
 [e :U 850 ]
-[; ;rfid.c: 291: output = "0xD5 ";
-"291
-[e = _output -> :s 16C `*uc ]
-[; ;rfid.c: 292: break;
-"292
-[e $U 839  ]
-[; ;rfid.c: 293: case 0xF1:
-"293
+[; ;rfid.c: 332: output = "0x88 ";
+"332
+[e = _output -> :s 12C `*uc ]
+[; ;rfid.c: 333: break;
+"333
+[e $U 842  ]
+[; ;rfid.c: 334: case 0x04:
+"334
 [e :U 851 ]
-[; ;rfid.c: 294: output = "0xF1 ";
-"294
-[e = _output -> :s 17C `*uc ]
-[; ;rfid.c: 295: break;
-"295
-[e $U 839  ]
-[; ;rfid.c: 296: default:
-"296
+[; ;rfid.c: 335: output = "0x04 ";
+"335
+[e = _output -> :s 13C `*uc ]
+[; ;rfid.c: 336: break;
+"336
+[e $U 842  ]
+[; ;rfid.c: 337: case 0xA8:
+"337
 [e :U 852 ]
-[; ;rfid.c: 297: output = "?";
-"297
+[; ;rfid.c: 338: output = "0xA8 ";
+"338
+[e = _output -> :s 14C `*uc ]
+[; ;rfid.c: 339: break;
+"339
+[e $U 842  ]
+[; ;rfid.c: 340: case 0xD5:
+"340
+[e :U 853 ]
+[; ;rfid.c: 341: output = "0xD5 ";
+"341
+[e = _output -> :s 15C `*uc ]
+[; ;rfid.c: 342: break;
+"342
+[e $U 842  ]
+[; ;rfid.c: 343: case 0xF1:
+"343
+[e :U 854 ]
+[; ;rfid.c: 344: output = "0xF1 ";
+"344
+[e = _output -> :s 16C `*uc ]
+[; ;rfid.c: 345: break;
+"345
+[e $U 842  ]
+[; ;rfid.c: 346: case 0x33:
+"346
+[e :U 855 ]
+[; ;rfid.c: 347: output = "0x33 ";
+"347
+[e = _output -> :s 17C `*uc ]
+[; ;rfid.c: 348: break;
+"348
+[e $U 842  ]
+[; ;rfid.c: 349: case 0x16:
+"349
+[e :U 856 ]
+[; ;rfid.c: 350: output = "0x16 ";
+"350
 [e = _output -> :s 18C `*uc ]
-"298
+[; ;rfid.c: 351: break;
+"351
+[e $U 842  ]
+[; ;rfid.c: 352: case 0x26:
+"352
+[e :U 857 ]
+[; ;rfid.c: 353: output = "0x26 ";
+"353
+[e = _output -> :s 19C `*uc ]
+[; ;rfid.c: 354: break;
+"354
+[e $U 842  ]
+[; ;rfid.c: 355: case 0x94:
+"355
+[e :U 858 ]
+[; ;rfid.c: 356: output = "0x94 ";
+"356
+[e = _output -> :s 20C `*uc ]
+[; ;rfid.c: 357: break;
+"357
+[e $U 842  ]
+[; ;rfid.c: 358: case 0xA3:
+"358
+[e :U 859 ]
+[; ;rfid.c: 359: output = "0xA3 ";
+"359
+[e = _output -> :s 21C `*uc ]
+[; ;rfid.c: 360: break;
+"360
+[e $U 842  ]
+[; ;rfid.c: 361: case 0x41:
+"361
+[e :U 860 ]
+[; ;rfid.c: 362: output = "0x41 ";
+"362
+[e = _output -> :s 22C `*uc ]
+[; ;rfid.c: 363: break;
+"363
+[e $U 842  ]
+[; ;rfid.c: 364: case 0xAA:
+"364
+[e :U 861 ]
+[; ;rfid.c: 365: output = "0xAA ";
+"365
+[e = _output -> :s 23C `*uc ]
+[; ;rfid.c: 366: break;
+"366
+[e $U 842  ]
+[; ;rfid.c: 367: case 0xC5:
+"367
+[e :U 862 ]
+[; ;rfid.c: 368: output = "0xC5 ";
+"368
+[e = _output -> :s 24C `*uc ]
+[; ;rfid.c: 369: break;
+"369
+[e $U 842  ]
+[; ;rfid.c: 370: case 0x8D:
+"370
+[e :U 863 ]
+[; ;rfid.c: 371: output = "0x8D ";
+"371
+[e = _output -> :s 25C `*uc ]
+[; ;rfid.c: 372: break;
+"372
+[e $U 842  ]
+[; ;rfid.c: 373: case 0x87:
+"373
+[e :U 864 ]
+[; ;rfid.c: 374: output = "0x87 ";
+"374
+[e = _output -> :s 26C `*uc ]
+[; ;rfid.c: 375: break;
+"375
+[e $U 842  ]
+[; ;rfid.c: 376: case 0x86:
+"376
+[e :U 865 ]
+[; ;rfid.c: 377: output = "0x86 ";
+"377
+[e = _output -> :s 27C `*uc ]
+[; ;rfid.c: 378: break;
+"378
+[e $U 842  ]
+[; ;rfid.c: 379: case 0x27:
+"379
+[e :U 866 ]
+[; ;rfid.c: 380: output = "0x27 ";
+"380
+[e = _output -> :s 28C `*uc ]
+[; ;rfid.c: 381: break;
+"381
+[e $U 842  ]
+[; ;rfid.c: 382: case 0x58:
+"382
+[e :U 867 ]
+[; ;rfid.c: 383: output = "0x58 ";
+"383
+[e = _output -> :s 29C `*uc ]
+[; ;rfid.c: 384: break;
+"384
+[e $U 842  ]
+[; ;rfid.c: 385: case 0xDA:
+"385
+[e :U 868 ]
+[; ;rfid.c: 386: output = "0xDA ";
+"386
+[e = _output -> :s 30C `*uc ]
+[; ;rfid.c: 387: break;
+"387
+[e $U 842  ]
+[; ;rfid.c: 388: case 0x60:
+"388
+[e :U 869 ]
+[; ;rfid.c: 389: output = "0x60 ";
+"389
+[e = _output -> :s 31C `*uc ]
+[; ;rfid.c: 390: break;
+"390
+[e $U 842  ]
+[; ;rfid.c: 391: default:
+"391
+[e :U 870 ]
+[; ;rfid.c: 392: output = "? ";
+"392
+[e = _output -> :s 32C `*uc ]
+[; ;rfid.c: 393: break;
+"393
+[e $U 842  ]
+"394
 }
-[; ;rfid.c: 298: }
-[e $U 839  ]
-"261
-[e :U 840 ]
-[e [\ _input , $ -> -> 128 `i `uc 841
- , $ -> -> 5 `i `uc 842
- , $ -> -> 68 `i `uc 843
- , $ -> -> 0 `i `uc 844
- , $ -> -> 40 `i `uc 845
- , $ -> -> 8 `i `uc 846
- , $ -> -> 136 `i `uc 847
- , $ -> -> 4 `i `uc 848
- , $ -> -> 168 `i `uc 849
- , $ -> -> 213 `i `uc 850
- , $ -> -> 241 `i `uc 851
- 852 ]
-"298
-[e :U 839 ]
-[; ;rfid.c: 299: return output;
-"299
+[; ;rfid.c: 394: }
+[e $U 842  ]
+"311
+[e :U 843 ]
+[e [\ _input , $ -> -> 128 `i `uc 844
+ , $ -> -> 5 `i `uc 845
+ , $ -> -> 68 `i `uc 846
+ , $ -> -> 0 `i `uc 847
+ , $ -> -> 40 `i `uc 848
+ , $ -> -> 8 `i `uc 849
+ , $ -> -> 136 `i `uc 850
+ , $ -> -> 4 `i `uc 851
+ , $ -> -> 168 `i `uc 852
+ , $ -> -> 213 `i `uc 853
+ , $ -> -> 241 `i `uc 854
+ , $ -> -> 51 `i `uc 855
+ , $ -> -> 22 `i `uc 856
+ , $ -> -> 38 `i `uc 857
+ , $ -> -> 148 `i `uc 858
+ , $ -> -> 163 `i `uc 859
+ , $ -> -> 65 `i `uc 860
+ , $ -> -> 170 `i `uc 861
+ , $ -> -> 197 `i `uc 862
+ , $ -> -> 141 `i `uc 863
+ , $ -> -> 135 `i `uc 864
+ , $ -> -> 134 `i `uc 865
+ , $ -> -> 39 `i `uc 866
+ , $ -> -> 88 `i `uc 867
+ , $ -> -> 218 `i `uc 868
+ , $ -> -> 96 `i `uc 869
+ 870 ]
+"394
+[e :U 842 ]
+[; ;rfid.c: 395: return output;
+"395
 [e ) _output ]
-[e $UE 838  ]
-[; ;rfid.c: 300: }
-"300
-[e :UE 838 ]
+[e $UE 841  ]
+[; ;rfid.c: 396: }
+"396
+[e :UE 841 ]
 }
 [a 4C 10 80 114 111 116 111 99 111 108 101 32 115 101 108 101 99 116 105 111 110 110 101 0 ]
-[a 18C 63 0 ]
-[a 10C 48 120 48 48 0 ]
+[a 9C 48 120 48 48 0 ]
 [a 3C 78 79 45 0 ]
 [a 2C 79 75 45 0 ]
 [a 5C 10 69 114 114 101 117 114 32 108 111 114 115 32 100 101 32 108 97 32 115 101 108 101 99 116 105 111 110 32 100 117 32 112 114 111 116 111 99 111 108 101 32 0 ]
-[a 15C 48 120 65 56 32 0 ]
-[a 13C 48 120 56 56 32 0 ]
-[a 11C 48 120 50 56 32 0 ]
-[a 12C 48 120 48 56 32 0 ]
-[a 16C 48 120 68 53 32 0 ]
-[a 8C 48 120 48 53 32 0 ]
-[a 9C 48 120 52 52 32 0 ]
-[a 14C 48 120 48 52 32 0 ]
-[a 17C 48 120 70 49 32 0 ]
-[a 7C 48 120 56 48 32 0 ]
-[a 6C 10 69 78 68 32 100 101 98 117 103 10 0 ]
+[a 25C 48 120 56 68 32 0 ]
+[a 30C 48 120 68 65 32 0 ]
+[a 23C 48 120 65 65 32 0 ]
+[a 32C 63 32 0 ]
+[a 14C 48 120 65 56 32 0 ]
+[a 12C 48 120 56 56 32 0 ]
+[a 29C 48 120 53 56 32 0 ]
+[a 10C 48 120 50 56 32 0 ]
+[a 11C 48 120 48 56 32 0 ]
+[a 26C 48 120 56 55 32 0 ]
+[a 28C 48 120 50 55 32 0 ]
+[a 27C 48 120 56 54 32 0 ]
+[a 19C 48 120 50 54 32 0 ]
+[a 18C 48 120 49 54 32 0 ]
+[a 15C 48 120 68 53 32 0 ]
+[a 24C 48 120 67 53 32 0 ]
+[a 7C 48 120 48 53 32 0 ]
+[a 20C 48 120 57 52 32 0 ]
+[a 8C 48 120 52 52 32 0 ]
+[a 13C 48 120 48 52 32 0 ]
+[a 21C 48 120 65 51 32 0 ]
+[a 17C 48 120 51 51 32 0 ]
+[a 16C 48 120 70 49 32 0 ]
+[a 22C 48 120 52 49 32 0 ]
+[a 6C 48 120 56 48 32 0 ]
+[a 31C 48 120 54 48 32 0 ]
 [a 1C 10 69 114 114 101 117 114 32 108 111 114 115 32 100 101 32 108 97 32 99 97 108 105 98 114 97 116 105 111 110 46 32 79 110 32 114 101 116 101 110 116 101 46 32 10 0 ]

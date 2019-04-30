@@ -1,6 +1,6 @@
 Version 3.2 HI-TECH Software Intermediate Code
 [p mainexit ]
-"40 mainprojet.c
+"46 mainprojet.c
 [v _initIO `(v ~T0 @X0 0 ef ]
 "1 adc.h
 [v _Adc_init `(v ~T0 @X0 0 ef ]
@@ -12,7 +12,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _initRfid `(v ~T0 @X0 0 ef ]
 "15 uart.h
 [v _cleanSerial `(v ~T0 @X0 0 ef ]
-"41 mainprojet.c
+"47 mainprojet.c
 [v _toggleLed `(v ~T0 @X0 0 ef1`uc ]
 "14 uart.h
 [v _sendStringUart2 `(v ~T0 @X0 0 ef1`*Cuc ]
@@ -24,7 +24,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _echoRfid `(uc ~T0 @X0 0 ef ]
 "3184 C:\Program Files (x86)\Microchip\xc8\v1.30\include\pic18f8722.h
 [v _PORTD `Vuc ~T0 @X0 0 e@3971 ]
-"44 mainprojet.c
+"50 mainprojet.c
 [v _startCountEcho `uc ~T0 @X0 0 e ]
 "3 rfid.h
 [v _getId `(v ~T0 @X0 0 ef ]
@@ -35,13 +35,45 @@ Version 3.2 HI-TECH Software Intermediate Code
 "9
 [v _select_protocole `(v ~T0 @X0 0 ef ]
 "10
-[v _get_NFC_tag `(v ~T0 @X0 0 ef ]
+[v _get_NFC_tag `(uc ~T0 @X0 0 ef ]
+"1 door.h
+[v _openDoor `(v ~T0 @X0 0 ef ]
+[s S136 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S136 . RA0 RA1 RA2 RA3 RA4 RA5 RA6 RA7 ]
+[s S137 :2 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S137 . . VREFM VREFP T0CKI LVDIN ]
+[s S138 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S138 . AN0 AN1 AN2 AN3 . AN4 ]
+[s S139 :5 `uc 1 :1 `uc 1 ]
+[n S139 . . HLVDIN ]
+[s S140 :7 `uc 1 :1 `uc 1 ]
+[n S140 . . RJPU ]
+[s S141 :1 `uc 1 ]
+[n S141 . ULPWUIN ]
+[u S135 `S136 1 `S137 1 `S138 1 `S139 1 `S140 1 `S141 1 ]
+[n S135 . . . . . . . ]
+"2673 C:\Program Files (x86)\Microchip\xc8\v1.30\include\pic18f8722.h
+[v _PORTAbits `VS135 ~T0 @X0 0 e@3968 ]
+"2 door.h
+[v _closeDoor `(v ~T0 @X0 0 ef ]
 "6357 C:\Program Files (x86)\Microchip\xc8\v1.30\include\pic18f8722.h
 [v _TRISD `Vuc ~T0 @X0 0 e@3989 ]
 "6136
 [v _TRISC `Vuc ~T0 @X0 0 e@3988 ]
 "2930
 [v _PORTC `Vuc ~T0 @X0 0 e@3970 ]
+"6799
+[v _TRISF `Vuc ~T0 @X0 0 e@3991 ]
+"3785
+[v _PORTF `Vuc ~T0 @X0 0 e@3973 ]
+[s S316 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S316 . TRISA0 TRISA1 TRISA2 TRISA3 TRISA4 TRISA5 TRISA6 TRISA7 ]
+[s S317 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S317 . RA0 RA1 RA2 RA3 RA4 RA5 RA6 RA7 ]
+[u S315 `S316 1 `S317 1 ]
+[n S315 . . . ]
+"5726
+[v _TRISAbits `VS315 ~T0 @X0 0 e@3986 ]
 [; ;htc.h: 22: extern void __builtin_software_breakpoint(void);
 [; ;pic18f8722.h: 44: extern volatile unsigned char SSP2CON2 @ 0xF62;
 "46 C:\Program Files (x86)\Microchip\xc8\v1.30\include\pic18f8722.h
@@ -6516,7 +6548,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;rfid.h: 6: char readDataRfid(void);
 [; ;rfid.h: 7: void sendDataRfid(char data);
 [; ;rfid.h: 9: void select_protocole(void);
-[; ;rfid.h: 10: void get_NFC_tag(void);
+[; ;rfid.h: 10: char get_NFC_tag(void);
 [; ;rfid.h: 11: void sendStringUart2v2(const char* data);
 [; ;rfid.h: 13: char* ascii2hex(char input);
 [; ;uart.h: 11: void initUart(void);
@@ -6534,337 +6566,460 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;lcd.h: 113: void LCDPutChar(unsigned char);
 [; ;lcd.h: 122: void LCDPutInst(unsigned char);
 [; ;lcd.h: 131: void LCDPutStr(const char *);
-"18 mainprojet.c
+[; ;door.h: 1: void openDoor(void);
+[; ;door.h: 2: void closeDoor(void);
+"19 mainprojet.c
 [p x OSC=HS ]
-"19
-[p x FCMEN=OFF ]
 "20
-[p x WDT=OFF ]
+[p x FCMEN=OFF ]
 "21
+[p x WDT=OFF ]
+"22
 [p x LVP=OFF ]
-"24
+"25
 [v _respEcho `uc ~T0 @X0 1 e ]
-[; ;mainprojet.c: 24: char respEcho;
+[; ;mainprojet.c: 25: char respEcho;
 "26
-[v _isEchoEnd `uc ~T0 @X0 1 e ]
-[; ;mainprojet.c: 26: char isEchoEnd;
-"27
-[v _isIdCheckEnd `uc ~T0 @X0 1 e ]
-[; ;mainprojet.c: 27: char isIdCheckEnd;
+[v _respDetect `uc ~T0 @X0 1 e ]
+[; ;mainprojet.c: 26: char respDetect;
 "28
-[v _isCalibrationEnd `uc ~T0 @X0 1 e ]
-[; ;mainprojet.c: 28: char isCalibrationEnd;
+[v _isEchoEnd `uc ~T0 @X0 1 e ]
+[; ;mainprojet.c: 28: char isEchoEnd;
 "29
-[v _isSelectProtocolEnd `uc ~T0 @X0 1 e ]
-[; ;mainprojet.c: 29: char isSelectProtocolEnd;
+[v _isIdCheckEnd `uc ~T0 @X0 1 e ]
+[; ;mainprojet.c: 29: char isIdCheckEnd;
 "30
-[v _isTagDetected `uc ~T0 @X0 1 e ]
-[; ;mainprojet.c: 30: char isTagDetected;
+[v _isCalibrationEnd `uc ~T0 @X0 1 e ]
+[; ;mainprojet.c: 30: char isCalibrationEnd;
+"31
+[v _isSelectProtocolEnd `uc ~T0 @X0 1 e ]
+[; ;mainprojet.c: 31: char isSelectProtocolEnd;
 "32
-[v _response_id `i ~T0 @X0 1 e ]
-[; ;mainprojet.c: 32: int response_id;
+[v _isTagDetected `uc ~T0 @X0 1 e ]
+[; ;mainprojet.c: 32: char isTagDetected;
 "33
-[v _id `*uc ~T0 @X0 1 e ]
-[; ;mainprojet.c: 33: char* id;
+[v _isDoorOpen `uc ~T0 @X0 1 e ]
+[; ;mainprojet.c: 33: char isDoorOpen;
 "34
+[v _isDoorClose `uc ~T0 @X0 1 e ]
+[; ;mainprojet.c: 34: char isDoorClose;
+[; ;mainprojet.c: 36: extern char waitDoor;
+"38
+[v _response_id `i ~T0 @X0 1 e ]
+[; ;mainprojet.c: 38: int response_id;
+"39
+[v _id `*uc ~T0 @X0 1 e ]
+[; ;mainprojet.c: 39: char* id;
+"40
 [v _expected_id `*uc ~T0 @X0 1 e ]
-[; ;mainprojet.c: 34: char* expected_id;
-"35
+[; ;mainprojet.c: 40: char* expected_id;
+"41
 [v _puissance_calibration `uc ~T0 @X0 1 e ]
-[; ;mainprojet.c: 35: char puissance_calibration;
-[; ;mainprojet.c: 37: extern char powerLvl[8];
-[; ;mainprojet.c: 40: void initIO();
-[; ;mainprojet.c: 41: void toggleLed(char idLed);
-[; ;mainprojet.c: 42: void waitMs2(int ms);
-[; ;mainprojet.c: 44: extern char startCountEcho;
-"47
+[; ;mainprojet.c: 41: char puissance_calibration;
+[; ;mainprojet.c: 43: extern char powerLvl[8];
+[; ;mainprojet.c: 46: void initIO();
+[; ;mainprojet.c: 47: void toggleLed(char idLed);
+[; ;mainprojet.c: 48: void waitMs2(int ms);
+[; ;mainprojet.c: 50: extern char startCountEcho;
+"53
 [v _main `(i ~T0 @X0 1 ef ]
 {
-[; ;mainprojet.c: 47: int main(void){
+[; ;mainprojet.c: 53: int main(void){
 [e :U _main ]
 [f ]
-[; ;mainprojet.c: 48: initIO();
-"48
+[; ;mainprojet.c: 54: initIO();
+"54
 [e ( _initIO ..  ]
-[; ;mainprojet.c: 49: Adc_init();
-"49
-[e ( _Adc_init ..  ]
-[; ;mainprojet.c: 50: initUart();
-"50
-[e ( _initUart ..  ]
-[; ;mainprojet.c: 51: initTimer();
-"51
-[e ( _initTimer ..  ]
-[; ;mainprojet.c: 52: initRfid();
-"52
-[e ( _initRfid ..  ]
-[; ;mainprojet.c: 53: cleanSerial();
-"53
-[e ( _cleanSerial ..  ]
-[; ;mainprojet.c: 55: respEcho = 0;
+[; ;mainprojet.c: 55: Adc_init();
 "55
-[e = _respEcho -> -> 0 `i `uc ]
-[; ;mainprojet.c: 57: isEchoEnd = 0;
+[e ( _Adc_init ..  ]
+[; ;mainprojet.c: 56: initUart();
+"56
+[e ( _initUart ..  ]
+[; ;mainprojet.c: 57: initTimer();
 "57
-[e = _isEchoEnd -> -> 0 `i `uc ]
-[; ;mainprojet.c: 58: isIdCheckEnd = 0;
+[e ( _initTimer ..  ]
+[; ;mainprojet.c: 58: initRfid();
 "58
-[e = _isIdCheckEnd -> -> 0 `i `uc ]
-[; ;mainprojet.c: 59: isCalibrationEnd = 0;
+[e ( _initRfid ..  ]
+[; ;mainprojet.c: 59: cleanSerial();
 "59
-[e = _isCalibrationEnd -> -> 0 `i `uc ]
-[; ;mainprojet.c: 60: isSelectProtocolEnd=0;
-"60
-[e = _isSelectProtocolEnd -> -> 0 `i `uc ]
-[; ;mainprojet.c: 61: isTagDetected = 0;
+[e ( _cleanSerial ..  ]
+[; ;mainprojet.c: 61: respEcho = 0;
 "61
-[e = _isTagDetected -> -> 0 `i `uc ]
-[; ;mainprojet.c: 63: expected_id = "NFC FS2JAST4";
-"63
-[e = _expected_id -> :s 1C `*uc ]
-[; ;mainprojet.c: 65: toggleLed(1);
+[e = _respEcho -> -> 0 `i `uc ]
+[; ;mainprojet.c: 64: isEchoEnd = 0;
+"64
+[e = _isEchoEnd -> -> 0 `i `uc ]
+[; ;mainprojet.c: 65: isIdCheckEnd = 0;
 "65
-[e ( _toggleLed (1 -> -> 1 `i `uc ]
-[; ;mainprojet.c: 67: sendStringUart2("\n\n-------------------------------------\n");
+[e = _isIdCheckEnd -> -> 0 `i `uc ]
+[; ;mainprojet.c: 66: isCalibrationEnd = 0;
+"66
+[e = _isCalibrationEnd -> -> 0 `i `uc ]
+[; ;mainprojet.c: 67: isSelectProtocolEnd=0;
 "67
-[e ( _sendStringUart2 (1 :s 2C ]
-[; ;mainprojet.c: 68: sendStringUart2("TP Microprocesseur 2A \n (c) Pierson & Romiguieres\n");
+[e = _isSelectProtocolEnd -> -> 0 `i `uc ]
+[; ;mainprojet.c: 68: isTagDetected = 0;
 "68
-[e ( _sendStringUart2 (1 :s 3C ]
-[; ;mainprojet.c: 69: sendStringUart2("-------------------------------------\n\n");
+[e = _isTagDetected -> -> 0 `i `uc ]
+[; ;mainprojet.c: 69: isDoorOpen = 0;
 "69
-[e ( _sendStringUart2 (1 :s 4C ]
-[; ;mainprojet.c: 70: _delay((unsigned long)((70)*(10000000/4000.0)));
+[e = _isDoorOpen -> -> 0 `i `uc ]
+[; ;mainprojet.c: 70: isDoorClose = 0;
 "70
-[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
-[; ;mainprojet.c: 72: while(1){
+[e = _isDoorClose -> -> 0 `i `uc ]
+[; ;mainprojet.c: 72: expected_id = "NFC FS2JAST";
 "72
+[e = _expected_id -> :s 1C `*uc ]
+[; ;mainprojet.c: 74: toggleLed(1);
+"74
+[e ( _toggleLed (1 -> -> 1 `i `uc ]
+[; ;mainprojet.c: 76: sendStringUart2("\n\n-------------------------------------\n");
+"76
+[e ( _sendStringUart2 (1 :s 2C ]
+[; ;mainprojet.c: 77: sendStringUart2("TP Microprocesseur 2A \n (c) Pierson & Romiguieres\n");
+"77
+[e ( _sendStringUart2 (1 :s 3C ]
+[; ;mainprojet.c: 78: sendStringUart2("-------------------------------------\n\n");
+"78
+[e ( _sendStringUart2 (1 :s 4C ]
+[; ;mainprojet.c: 79: _delay((unsigned long)((70)*(10000000/4000.0)));
+"79
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+[; ;mainprojet.c: 81: while(1){
+"81
 [e :U 765 ]
 {
-[; ;mainprojet.c: 76: if(isEchoEnd == 0) {
-"76
+[; ;mainprojet.c: 85: if(isEchoEnd == 0) {
+"85
 [e $ ! == -> _isEchoEnd `i -> 0 `i 767  ]
 {
-[; ;mainprojet.c: 77: sendStringUart2("\nDemarrage en cours...\n");
-"77
+[; ;mainprojet.c: 86: sendStringUart2("\nDemarrage en cours...\n");
+"86
 [e ( _sendStringUart2 (1 :s 5C ]
-[; ;mainprojet.c: 78: sendStringUart2("Envoie de la commande echo...\n");
-"78
-[e ( _sendStringUart2 (1 :s 6C ]
-[; ;mainprojet.c: 80: respEcho = echoRfid();
-"80
-[e = _respEcho ( _echoRfid ..  ]
-[; ;mainprojet.c: 82: sendStringUart2(" > Echo termine!");
-"82
-[e ( _sendStringUart2 (1 :s 7C ]
-[; ;mainprojet.c: 84: PORTD=0x00;
-"84
-[e = _PORTD -> -> 0 `i `uc ]
-[; ;mainprojet.c: 85: isEchoEnd = 1;
-"85
-[e = _isEchoEnd -> -> 1 `i `uc ]
-[; ;mainprojet.c: 87: toggleLed(1);
+[; ;mainprojet.c: 87: sendStringUart2("Envoie de la commande echo...\n");
 "87
+[e ( _sendStringUart2 (1 :s 6C ]
+[; ;mainprojet.c: 89: respEcho = echoRfid();
+"89
+[e = _respEcho ( _echoRfid ..  ]
+[; ;mainprojet.c: 91: sendStringUart2(" > Echo termine!");
+"91
+[e ( _sendStringUart2 (1 :s 7C ]
+[; ;mainprojet.c: 93: PORTD=0x00;
+"93
+[e = _PORTD -> -> 0 `i `uc ]
+[; ;mainprojet.c: 94: isEchoEnd = 1;
+"94
+[e = _isEchoEnd -> -> 1 `i `uc ]
+[; ;mainprojet.c: 96: toggleLed(1);
+"96
 [e ( _toggleLed (1 -> -> 1 `i `uc ]
-[; ;mainprojet.c: 88: toggleLed(2);
-"88
+[; ;mainprojet.c: 97: toggleLed(2);
+"97
 [e ( _toggleLed (1 -> -> 2 `i `uc ]
-"90
+"99
 }
-[; ;mainprojet.c: 90: }else{
+[; ;mainprojet.c: 99: }else{
 [e $U 768  ]
 [e :U 767 ]
 {
-[; ;mainprojet.c: 91: startCountEcho = 0;
-"91
+[; ;mainprojet.c: 100: startCountEcho = 0;
+"100
 [e = _startCountEcho -> -> 0 `i `uc ]
-"92
+"101
 }
 [e :U 768 ]
-[; ;mainprojet.c: 92: }
-[; ;mainprojet.c: 95: if(!isIdCheckEnd){
-"95
+[; ;mainprojet.c: 101: }
+[; ;mainprojet.c: 104: if(!isIdCheckEnd){
+"104
 [e $ ! ! != -> _isIdCheckEnd `i -> -> -> 0 `i `uc `i 769  ]
 {
-[; ;mainprojet.c: 96: sendStringUart2("\nRecuperation de l'identite du RFID...");
-"96
-[e ( _sendStringUart2 (1 :s 8C ]
-[; ;mainprojet.c: 97: sendStringUart2("\nIdentite attendue:");
-"97
-[e ( _sendStringUart2 (1 :s 9C ]
-[; ;mainprojet.c: 98: sendStringUart2((const char*)expected_id);
-"98
-[e ( _sendStringUart2 (1 -> _expected_id `*Cuc ]
-[; ;mainprojet.c: 99: sendStringUart2(" \nIdentite lue: ");
-"99
-[e ( _sendStringUart2 (1 :s 10C ]
-[; ;mainprojet.c: 100: getId();
-"100
-[e ( _getId ..  ]
-[; ;mainprojet.c: 101: isIdCheckEnd = 1;
-"101
-[e = _isIdCheckEnd -> -> 1 `i `uc ]
-[; ;mainprojet.c: 104: if(isIdOk() == 1){
-"104
-[e $ ! == -> ( _isIdOk ..  `i -> 1 `i 770  ]
-{
-[; ;mainprojet.c: 105: sendStringUart2("\n > Identite confirmee!\n");
+[; ;mainprojet.c: 105: sendStringUart2("\nRecuperation de l'identite du RFID...");
 "105
-[e ( _sendStringUart2 (1 :s 11C ]
-[; ;mainprojet.c: 106: toggleLed(3);
+[e ( _sendStringUart2 (1 :s 8C ]
+[; ;mainprojet.c: 106: sendStringUart2("\nIdentite attendue:");
 "106
-[e ( _toggleLed (1 -> -> 3 `i `uc ]
+[e ( _sendStringUart2 (1 :s 9C ]
+[; ;mainprojet.c: 107: sendStringUart2((const char*)expected_id);
 "107
-}
-[; ;mainprojet.c: 107: }else{
-[e $U 771  ]
-[e :U 770 ]
-{
-[; ;mainprojet.c: 108: toggleLed(4);
+[e ( _sendStringUart2 (1 -> _expected_id `*Cuc ]
+[; ;mainprojet.c: 108: sendStringUart2(" \nIdentite lue: ");
 "108
-[e ( _toggleLed (1 -> -> 4 `i `uc ]
-[; ;mainprojet.c: 109: sendStringUart2("\n > Identite non confirmee!\n");
+[e ( _sendStringUart2 (1 :s 10C ]
+[; ;mainprojet.c: 109: _delay((unsigned long)((70)*(10000000/4000.0)));
 "109
-[e ( _sendStringUart2 (1 :s 12C ]
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
 [; ;mainprojet.c: 110: _delay((unsigned long)((70)*(10000000/4000.0)));
 "110
 [e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
-[; ;mainprojet.c: 111: _delay((unsigned long)((70)*(10000000/4000.0)));
+[; ;mainprojet.c: 111: getId();
 "111
-[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
-[; ;mainprojet.c: 112: _delay((unsigned long)((70)*(10000000/4000.0)));
+[e ( _getId ..  ]
+[; ;mainprojet.c: 112: isIdCheckEnd = 1;
 "112
-[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
-"113
+[e = _isIdCheckEnd -> -> 1 `i `uc ]
+[; ;mainprojet.c: 115: if(isIdOk() == 1){
+"115
+[e $ ! == -> ( _isIdOk ..  `i -> 1 `i 770  ]
+{
+[; ;mainprojet.c: 116: sendStringUart2("\n > Identite confirmee!\n");
+"116
+[e ( _sendStringUart2 (1 :s 11C ]
+[; ;mainprojet.c: 117: toggleLed(3);
+"117
+[e ( _toggleLed (1 -> -> 3 `i `uc ]
+"118
+}
+[; ;mainprojet.c: 118: }else{
+[e $U 771  ]
+[e :U 770 ]
+{
+[; ;mainprojet.c: 119: toggleLed(4);
+"119
+[e ( _toggleLed (1 -> -> 4 `i `uc ]
+[; ;mainprojet.c: 120: sendStringUart2("\n > Identite non confirmee!\n");
+"120
+[e ( _sendStringUart2 (1 :s 12C ]
+"122
 }
 [e :U 771 ]
-"115
-}
-[e :U 769 ]
-[; ;mainprojet.c: 113: }
-[; ;mainprojet.c: 115: }
-[; ;mainprojet.c: 118: if(!isCalibrationEnd){
-"118
-[e $ ! ! != -> _isCalibrationEnd `i -> -> -> 0 `i `uc `i 772  ]
-{
-[; ;mainprojet.c: 119: sendStringUart2("Calibration du RFID en cours....");
-"119
-[e ( _sendStringUart2 (1 :s 13C ]
-[; ;mainprojet.c: 120: puissance_calibration = calibration();
-"120
-[e = _puissance_calibration ( _calibration ..  ]
-[; ;mainprojet.c: 121: sendStringUart2("\nCalibration terminee");
-"121
-[e ( _sendStringUart2 (1 :s 14C ]
-[; ;mainprojet.c: 123: isCalibrationEnd = 1;
-"123
-[e = _isCalibrationEnd -> -> 1 `i `uc ]
 "124
 }
-[e :U 772 ]
+[e :U 769 ]
+[; ;mainprojet.c: 122: }
 [; ;mainprojet.c: 124: }
-[; ;mainprojet.c: 127: if (!isSelectProtocolEnd){
+[; ;mainprojet.c: 127: if(!isCalibrationEnd){
 "127
-[e $ ! ! != -> _isSelectProtocolEnd `i -> -> -> 0 `i `uc `i 773  ]
+[e $ ! ! != -> _isCalibrationEnd `i -> -> -> 0 `i `uc `i 772  ]
 {
-[; ;mainprojet.c: 128: sendStringUart2("\n Selection du protocole en cours....");
+[; ;mainprojet.c: 128: sendStringUart2("Calibration du RFID en cours....");
 "128
-[e ( _sendStringUart2 (1 :s 15C ]
-[; ;mainprojet.c: 129: select_protocole();
+[e ( _sendStringUart2 (1 :s 13C ]
+[; ;mainprojet.c: 129: puissance_calibration = calibration();
 "129
-[e ( _select_protocole ..  ]
-[; ;mainprojet.c: 130: sendStringUart2("\n Protocole ISO/IEC 14443 Type A - 106 Kbs selectionne");
+[e = _puissance_calibration ( _calibration ..  ]
+[; ;mainprojet.c: 130: sendStringUart2("\nCalibration terminee");
 "130
-[e ( _sendStringUart2 (1 :s 16C ]
-[; ;mainprojet.c: 132: isSelectProtocolEnd = 1;
+[e ( _sendStringUart2 (1 :s 14C ]
+[; ;mainprojet.c: 132: isCalibrationEnd = 1;
 "132
-[e = _isSelectProtocolEnd -> -> 1 `i `uc ]
+[e = _isCalibrationEnd -> -> 1 `i `uc ]
 "133
 }
-[e :U 773 ]
+[e :U 772 ]
 [; ;mainprojet.c: 133: }
-[; ;mainprojet.c: 135: if(!isTagDetected){
-"135
-[e $ ! ! != -> _isTagDetected `i -> -> -> 0 `i `uc `i 774  ]
-{
-[; ;mainprojet.c: 136: sendStringUart2("\nDetection du tag en cours...");
+[; ;mainprojet.c: 136: if (!isSelectProtocolEnd){
 "136
-[e ( _sendStringUart2 (1 :s 17C ]
-[; ;mainprojet.c: 137: get_NFC_tag();
+[e $ ! ! != -> _isSelectProtocolEnd `i -> -> -> 0 `i `uc `i 773  ]
+{
+[; ;mainprojet.c: 137: sendStringUart2("\n Selection du protocole en cours....");
 "137
-[e ( _get_NFC_tag ..  ]
-[; ;mainprojet.c: 138: sendStringUart2("\n Tag detecte!");
+[e ( _sendStringUart2 (1 :s 15C ]
+[; ;mainprojet.c: 138: select_protocole();
 "138
-[e ( _sendStringUart2 (1 :s 18C ]
-[; ;mainprojet.c: 139: isTagDetected = 1;
+[e ( _select_protocole ..  ]
+[; ;mainprojet.c: 139: sendStringUart2("\n Protocole ISO/IEC 14443 Type A - 106 Kbs selectionne");
 "139
-[e = _isTagDetected -> -> 1 `i `uc ]
-"140
-}
-[e :U 774 ]
+[e ( _sendStringUart2 (1 :s 16C ]
+[; ;mainprojet.c: 141: isSelectProtocolEnd = 1;
+"141
+[e = _isSelectProtocolEnd -> -> 1 `i `uc ]
 "142
 }
+[e :U 773 ]
+[; ;mainprojet.c: 142: }
+[; ;mainprojet.c: 144: if(!isTagDetected){
+"144
+[e $ ! ! != -> _isTagDetected `i -> -> -> 0 `i `uc `i 774  ]
+{
+[; ;mainprojet.c: 145: sendStringUart2("\nDetection du tag en cours...");
+"145
+[e ( _sendStringUart2 (1 :s 17C ]
+[; ;mainprojet.c: 146: _delay((unsigned long)((70)*(10000000/4000.0)));
+"146
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+[; ;mainprojet.c: 147: _delay((unsigned long)((70)*(10000000/4000.0)));
+"147
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+[; ;mainprojet.c: 148: respDetect = get_NFC_tag();
+"148
+[e = _respDetect ( _get_NFC_tag ..  ]
+[; ;mainprojet.c: 150: if(respDetect == 1){
+"150
+[e $ ! == -> _respDetect `i -> 1 `i 775  ]
+{
+[; ;mainprojet.c: 151: sendStringUart2("\nTag detecte!");
+"151
+[e ( _sendStringUart2 (1 :s 18C ]
+[; ;mainprojet.c: 152: sendStringUart2("\n Ouverture de la porte en cours.");
+"152
+[e ( _sendStringUart2 (1 :s 19C ]
+[; ;mainprojet.c: 153: isTagDetected = 1;
+"153
+[e = _isTagDetected -> -> 1 `i `uc ]
+"154
+}
+[; ;mainprojet.c: 154: }else if(respDetect == 2){
+[e $U 776  ]
+[e :U 775 ]
+[e $ ! == -> _respDetect `i -> 2 `i 777  ]
+{
+[; ;mainprojet.c: 155: _delay((unsigned long)((70)*(10000000/4000.0)));
+"155
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+[; ;mainprojet.c: 156: sendStringUart2("\n\rMauvais tag!\n");
+"156
+[e ( _sendStringUart2 (1 :s 20C ]
+[; ;mainprojet.c: 157: _delay((unsigned long)((70)*(10000000/4000.0)));
+"157
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+"158
+}
+[; ;mainprojet.c: 158: }else{
+[e $U 778  ]
+[e :U 777 ]
+{
+[; ;mainprojet.c: 159: _delay((unsigned long)((70)*(10000000/4000.0)));
+"159
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+[; ;mainprojet.c: 160: sendStringUart2("\n\rAucun tag detecte!\n");
+"160
+[e ( _sendStringUart2 (1 :s 21C ]
+[; ;mainprojet.c: 161: _delay((unsigned long)((70)*(10000000/4000.0)));
+"161
+[e ( __delay (1 -> * -> -> 70 `i `d / -> -> 10000000 `l `d .4000.0 `ul ]
+"162
+}
+[e :U 778 ]
+[e :U 776 ]
+"163
+}
+[e :U 774 ]
+[; ;mainprojet.c: 162: }
+[; ;mainprojet.c: 163: }
+[; ;mainprojet.c: 166: if(isTagDetected == 1 && isDoorClose == 0){
+"166
+[e $ ! && == -> _isTagDetected `i -> 1 `i == -> _isDoorClose `i -> 0 `i 779  ]
+{
+[; ;mainprojet.c: 169: openDoor();
+"169
+[e ( _openDoor ..  ]
+[; ;mainprojet.c: 170: sendStringUart2("\nPorte ouverte!");
+"170
+[e ( _sendStringUart2 (1 :s 22C ]
+[; ;mainprojet.c: 171: sendStringUart2("\nPour fermer la porte, appuyez sur le bouton RA5  \n");
+"171
+[e ( _sendStringUart2 (1 :s 23C ]
+[; ;mainprojet.c: 173: isDoorOpen = 1;
+"173
+[e = _isDoorOpen -> -> 1 `i `uc ]
+[; ;mainprojet.c: 175: if(PORTAbits.RA5 == 0){
+"175
+[e $ ! == -> . . _PORTAbits 0 5 `i -> 0 `i 780  ]
+{
+[; ;mainprojet.c: 176: sendStringUart2("\n Fermeture de la porte");
+"176
+[e ( _sendStringUart2 (1 :s 24C ]
+[; ;mainprojet.c: 177: closeDoor();
+"177
+[e ( _closeDoor ..  ]
+[; ;mainprojet.c: 178: sendStringUart2("\nPorte fermee!");
+"178
+[e ( _sendStringUart2 (1 :s 25C ]
+[; ;mainprojet.c: 179: isDoorClose = 0;
+"179
+[e = _isDoorClose -> -> 0 `i `uc ]
+[; ;mainprojet.c: 180: (isTagDetected = 0;
+"180
+[e = _isTagDetected -> -> 0 `i `uc ]
+"181
+}
+[e :U 780 ]
+"183
+}
+[e :U 779 ]
+"184
+}
 [e :U 764 ]
-"72
+"81
 [e $U 765  ]
 [e :U 766 ]
-[; ;mainprojet.c: 140: }
-[; ;mainprojet.c: 142: }
-[; ;mainprojet.c: 145: }
-"145
+[; ;mainprojet.c: 181: }
+[; ;mainprojet.c: 183: }
+[; ;mainprojet.c: 184: }
+[; ;mainprojet.c: 187: }
+"187
 [e :UE 763 ]
 }
-"147
+"189
 [v _initIO `(v ~T0 @X0 1 ef ]
 {
-[; ;mainprojet.c: 147: void initIO(){
+[; ;mainprojet.c: 189: void initIO(){
 [e :U _initIO ]
 [f ]
-[; ;mainprojet.c: 149: TRISD=0x00;
-"149
+[; ;mainprojet.c: 191: TRISD=0x00;
+"191
 [e = _TRISD -> -> 0 `i `uc ]
-[; ;mainprojet.c: 150: TRISC=0x00;
-"150
+[; ;mainprojet.c: 192: TRISC=0x00;
+"192
 [e = _TRISC -> -> 0 `i `uc ]
-[; ;mainprojet.c: 152: PORTD=0x00;
-"152
+[; ;mainprojet.c: 194: PORTD=0x00;
+"194
 [e = _PORTD -> -> 0 `i `uc ]
-[; ;mainprojet.c: 153: PORTC=0x00;
-"153
+[; ;mainprojet.c: 195: PORTC=0x00;
+"195
 [e = _PORTC -> -> 0 `i `uc ]
-[; ;mainprojet.c: 155: }
-"155
-[e :UE 775 ]
+[; ;mainprojet.c: 197: TRISF = 0x00;
+"197
+[e = _TRISF -> -> 0 `i `uc ]
+[; ;mainprojet.c: 198: PORTF = 0x00;
+"198
+[e = _PORTF -> -> 0 `i `uc ]
+[; ;mainprojet.c: 200: TRISAbits.RA5 = 1;
+"200
+[e = . . _TRISAbits 1 5 -> -> 1 `i `uc ]
+[; ;mainprojet.c: 203: }
+"203
+[e :UE 781 ]
 }
-"157
+"205
 [v _toggleLed `(v ~T0 @X0 1 ef1`uc ]
 {
-[; ;mainprojet.c: 157: void toggleLed(char idLed){
+[; ;mainprojet.c: 205: void toggleLed(char idLed){
 [e :U _toggleLed ]
 [v _idLed `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;mainprojet.c: 159: PORTD^=(0x01<<(idLed-1));
-"159
+[; ;mainprojet.c: 207: PORTD^=(0x01<<(idLed-1));
+"207
 [e =^ _PORTD -> << -> 1 `i - -> _idLed `i -> 1 `i `uc ]
-[; ;mainprojet.c: 161: }
-"161
-[e :UE 776 ]
+[; ;mainprojet.c: 209: }
+"209
+[e :UE 782 ]
 }
+[a 24C 10 32 70 101 114 109 101 116 117 114 101 32 100 101 32 108 97 32 112 111 114 116 101 0 ]
 [a 16C 10 32 80 114 111 116 111 99 111 108 101 32 73 83 79 47 73 69 67 32 49 52 52 52 51 32 84 121 112 101 32 65 32 45 32 49 48 54 32 75 98 115 32 115 101 108 101 99 116 105 111 110 110 101 0 ]
 [a 14C 10 67 97 108 105 98 114 97 116 105 111 110 32 116 101 114 109 105 110 101 101 0 ]
+[a 1C 78 70 67 32 70 83 50 74 65 83 84 0 ]
 [a 9C 10 73 100 101 110 116 105 116 101 32 97 116 116 101 110 100 117 101 58 0 ]
-[a 1C 78 70 67 32 70 83 50 74 65 83 84 52 0 ]
+[a 19C 10 32 79 117 118 101 114 116 117 114 101 32 100 101 32 108 97 32 112 111 114 116 101 32 101 110 32 99 111 117 114 115 46 0 ]
 [a 17C 10 68 101 116 101 99 116 105 111 110 32 100 117 32 116 97 103 32 101 110 32 99 111 117 114 115 46 46 46 0 ]
 [a 8C 10 82 101 99 117 112 101 114 97 116 105 111 110 32 100 101 32 108 39 105 100 101 110 116 105 116 101 32 100 117 32 82 70 73 68 46 46 46 0 ]
 [a 15C 10 32 83 101 108 101 99 116 105 111 110 32 100 117 32 112 114 111 116 111 99 111 108 101 32 101 110 32 99 111 117 114 115 46 46 46 46 0 ]
 [a 13C 67 97 108 105 98 114 97 116 105 111 110 32 100 117 32 82 70 73 68 32 101 110 32 99 111 117 114 115 46 46 46 46 0 ]
-[a 18C 10 32 84 97 103 32 100 101 116 101 99 116 101 33 0 ]
+[a 22C 10 80 111 114 116 101 32 111 117 118 101 114 116 101 33 0 ]
+[a 18C 10 84 97 103 32 100 101 116 101 99 116 101 33 0 ]
 [a 7C 32 62 32 69 99 104 111 32 116 101 114 109 105 110 101 33 0 ]
+[a 25C 10 80 111 114 116 101 32 102 101 114 109 101 101 33 0 ]
 [a 10C 32 10 73 100 101 110 116 105 116 101 32 108 117 101 58 32 0 ]
 [a 3C 84 80 32 77 105 99 114 111 112 114 111 99 101 115 115 101 117 114 32 50 65 32 10 32 40 99 41 32 80 105 101 114 115 111 110 32 38 32 82 111 109 105 103 117 105 101 114 101 115 10 0 ]
 [a 5C 10 68 101 109 97 114 114 97 103 101 32 101 110 32 99 111 117 114 115 46 46 46 10 0 ]
 [a 6C 69 110 118 111 105 101 32 100 101 32 108 97 32 99 111 109 109 97 110 100 101 32 101 99 104 111 46 46 46 10 0 ]
 [a 2C 10 10 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 10 0 ]
+[a 20C 10 13 77 97 117 118 97 105 115 32 116 97 103 33 10 0 ]
+[a 21C 10 13 65 117 99 117 110 32 116 97 103 32 100 101 116 101 99 116 101 33 10 0 ]
 [a 12C 10 32 62 32 73 100 101 110 116 105 116 101 32 110 111 110 32 99 111 110 102 105 114 109 101 101 33 10 0 ]
 [a 11C 10 32 62 32 73 100 101 110 116 105 116 101 32 99 111 110 102 105 114 109 101 101 33 10 0 ]
+[a 23C 10 80 111 117 114 32 102 101 114 109 101 114 32 108 97 32 112 111 114 116 101 44 32 97 112 112 117 121 101 122 32 115 117 114 32 108 101 32 98 111 117 116 111 110 32 82 65 53 32 32 10 0 ]
 [a 4C 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 10 10 0 ]

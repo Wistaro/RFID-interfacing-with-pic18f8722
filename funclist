@@ -1,0 +1,25 @@
+_sendStringUart2v2: CODE, 68244 0 112
+_get_NFC_tag: CODE, 66284 0 658
+_cleanSerial: CODE, 68978 0 44
+__stringdata: MEDIUMCONST, 64539 0 995
+_readDataRfid: CODE, 69160 0 12
+_strlen: CODE, 68450 0 94
+_select_protocole: CODE, 68714 0 74
+_closeDoor: CODE, 67988 0 128
+_main: CODE, 65536 0 748
+_initUart: CODE, 68924 0 54
+_Adc_init: CODE, 68862 0 62
+_initRfid: CODE, 68788 0 74
+__initialization: CODE, 68632 0 76
+_toggleLed: CODE, 69022 0 34
+_initTimer: CODE, 69088 0 30
+_openDoor: CODE, 67848 0 140
+_echoRfid: CODE, 68356 0 94
+_calibration: CODE, 66942 0 566
+_sendDataRfid: CODE, 69146 0 14
+_routine_IT_timer0: CODE, 8 0 67672
+_initIO: CODE, 69118 0 28
+_isIdOk: CODE, 67680 0 168
+_getId: CODE, 68544 0 88
+_sendStringUart2: CODE, 68116 0 128
+Total: 72093

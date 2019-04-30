@@ -1,5 +1,5 @@
- build/default/production/mainprojet.d  \
- build/default/production/mainprojet.p1:  \
+ build/default/debug/mainprojet.d  \
+ build/default/debug/mainprojet.p1:  \
  mainprojet.c  \
 utils.h  \
 timer.h  \

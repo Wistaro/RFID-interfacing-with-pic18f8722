@@ -35,19 +35,18 @@ void initUart(void){
 }
 
 
-void sendStringUart2(const char* data){
+void sendStringUart2(const char* data){ //send datas to serial monitor through an Arduino
     
     int i = 0;
     int taille_tab = strlen(data);
     
     for(i = 0; i<= taille_tab; i++){
-            //envoit sur moniteur serie via arduino
-            while(!TXSTA2bits.TRMT); //wait for transmittion register emptyF
+            while(!TXSTA2bits.TRMT); //wait for transmittion register empty
             TXREG2 = data[i]; //send value to transmition register
     }
 }
 
-void cleanSerial(){
+void cleanSerial(){ //clean the serial monitor by sending 100 carriage return
     for(int i = 0; i<=100; i++){
        sendStringUart2("\n"); 
     }

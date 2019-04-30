@@ -7203,7 +7203,7 @@ extern volatile __bit nWRITE2 @ (((unsigned) &SSP2STAT)*8) + 2;
 
 extern volatile __bit nWRL @ (((unsigned) &PORTJ)*8) + 2;
 
-# 11 "timer.c"
+# 12 "timer.c"
 int cpt;
 int toto;
 extern char isEchoOk;
@@ -7245,6 +7245,7 @@ PORTD^=0x01<<7;
 
 }
 }
+
 
 INTCONbits.TMR0IF = 0;
 }
